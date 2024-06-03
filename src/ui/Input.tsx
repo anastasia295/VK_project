@@ -23,4 +23,5 @@ export interface InputProps {
   bc?: string;
   border?: string;
   color?: string;
+  defaultValue?: string;
 }

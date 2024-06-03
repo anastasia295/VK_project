@@ -1,4 +1,4 @@
-import { Text } from "../Text";
+import { Text } from "../../ui/Text";
 import { Input } from "../../ui/Input";
 import { Button } from "../../ui/Button";
 import { Flex } from "../../ui/Flex";
@@ -10,7 +10,7 @@ import {
   StyledContainer,
   StyledPageblockVK,
 } from "./SignUp.styled";
-import { Area } from "../Area/Area";
+import { Area } from "../../ui/Area";
 
 export function SignUp() {
   return (
@@ -46,6 +46,7 @@ export function SignUp() {
               bc="#3f3f3f"
               border="1px solid #545454"
               color="#e9e9e9"
+              defaultValue="+7"
             ></Input>
             <Input
               border="1px solid #545454"

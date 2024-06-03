@@ -1,4 +1,4 @@
-import { Text } from "../Text";
+import { Text } from "../../ui/Text";
 
 import { Input } from "../../ui/Input";
 import { Button } from "../../ui/Button";
@@ -12,7 +12,7 @@ import {
   StyledContainer,
   StyledPageblockVK,
 } from "./SIgnIn.styled";
-import { Area } from "../Area/Area";
+import { Area } from "../../ui/Area";
 
 export function SignIn() {
   return (
