@@ -1,19 +1,18 @@
 import styled from "styled-components";
 import React from "react";
 
-const StyledText = styled.h1<TextProps>`
-  color: #d3d3d3;
-  font-size: ${(props) => props.fontsize};
-  margin-top: ${(props) => props.margintop};
-  text-align: center;
+export const Text = styled.h1<TextProps>`
+  ${({ fs }) => fs && `font-size: ${fs}`};
+  ${({ color }) => color && `color: ${color}`};
+  ${({ width }) => width && `width: ${width}`};
+  ${({ textalign }) => textalign && `text-align: ${textalign}`};
 `;
 
 export interface TextProps {
   children: React.ReactNode;
-  fontsize: string;
-  margintop?: string;
-}
+  fs?: string;
+  color?: string;
+  width?: string;
 
-export function Text(props: TextProps) {
-  return <StyledText {...props}></StyledText>;
+  textalign?: "center" | "left" | "right" | "justify";
 }

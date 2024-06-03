@@ -1,9 +1,9 @@
 import React from "react";
-import { SignIn } from "./Pages/SignIn";
-import { SignUp } from "./Pages/SignUp";
+import { SignIn } from "./components/signIn/SignIn";
+import { SignUp } from "./components/signUp/SignUp";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Routes } from "react-router-dom";
-import { Page } from "./Pages/Page";
+import { Page } from "./pages/Page";
 
 function App() {
   return (
