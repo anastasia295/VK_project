@@ -6,7 +6,7 @@ import { Flex } from "../../ui/Flex";
 import { NavbarLink } from "../../ui/NavbarLink";
 
 import { Img } from "../img/Img";
-import iconvk from "../img/img/iconvk.png";
+import icon_vk_black from "../img/img/icon_vk_black.png";
 import {
   StyledAppWrapper,
   StyledContainer,
@@ -20,21 +20,23 @@ export function SignIn() {
       <StyledContainer>
         <StyledPageblockVK>
           <Flex
+            display="flex"
             flexdirection="column"
             justifycontent="center"
             alignitems="center"
             gap="20px"
           >
             <Area mt="20px">
-              <Img width="60px" height="60px" src={iconvk}></Img>{" "}
+              <Img width="60px" height="50px" src={icon_vk_black}></Img>
             </Area>
             <Area mt="-20px">
-              <Text color="#d3d3d3" fs="30px">
+              <Text color="#d3d3d3" fs="25px">
                 Вход Вконтакте
               </Text>
             </Area>
 
             <Input
+              withBorder
               border="1px solid #545454"
               br="8px"
               padding="15px"
@@ -45,6 +47,7 @@ export function SignIn() {
               placeholder="Введите логин"
             ></Input>
             <Input
+              withBorder
               border="1px solid #545454"
               br="8px"
               padding="15px"

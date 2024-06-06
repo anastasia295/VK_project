@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
-export const Input = styled.input<InputProps>`
+export const Textarea = styled.textarea<TextareaProps>`
   outline: none;
   border: 1px solid #2c2c2c;
+  resize: none;
   font-size: 14px;
   ${({ br }) => br && `border-radius: ${br}`};
   ${({ height }) => height && `height: ${height}`};
@@ -11,15 +12,11 @@ export const Input = styled.input<InputProps>`
   ${({ bc }) => bc && `background-color: ${bc}`};
   ${({ border }) => border && `border: ${border}`};
   ${({ width }) => width && `width: ${width}`};
-  ${({ withBorder }) =>
-    withBorder &&
-    `&:focus {
-border: 1px solid #abcdef;
-}
-`}
+  ${({ wrap }) => wrap && `wrap: ${wrap}`};
 `;
 
-export interface InputProps {
+// border: 1px solid #abcdef;
+export interface TextareaProps {
   placeholder?: string;
   width?: string;
   height?: string;
@@ -29,5 +26,8 @@ export interface InputProps {
   border?: string;
   color?: string;
   defaultValue?: string;
-  withBorder?: boolean;
+
+  maxlength?: string;
+
+  wrap?: "soft" | "hard";
 }

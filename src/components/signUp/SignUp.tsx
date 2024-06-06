@@ -3,7 +3,7 @@ import { Input } from "../../ui/Input";
 import { Button } from "../../ui/Button";
 import { Flex } from "../../ui/Flex";
 import { Img } from "../img/Img";
-import iconvk from "../img/img/iconvk.png";
+import icon_vk_black from "../img/img/icon_vk_black.png";
 
 import {
   StyledAppWrapper,
@@ -18,17 +18,18 @@ export function SignUp() {
       <StyledContainer>
         <StyledPageblockVK>
           <Flex
+            display="flex"
             flexdirection="column"
             justifycontent="center"
             alignitems="center"
             gap="20px"
           >
             <Area mt="20px">
-              <Img width="60px" height="60px" src={iconvk}></Img>{" "}
+              <Img width="60px" height="50px" src={icon_vk_black}></Img>
             </Area>
 
-            <Area mt="-10px">
-              <Text color="#d3d3d3" fs="30px">
+            <Area mt="-20px">
+              <Text color="#d3d3d3" fs="25px">
                 Введите телефон
               </Text>
             </Area>
@@ -38,6 +39,7 @@ export function SignUp() {
               </Text>
             </Area>
             <Input
+              withBorder
               padding="15px"
               br="8px"
               width="304px"
@@ -49,6 +51,7 @@ export function SignUp() {
               defaultValue="+7"
             ></Input>
             <Input
+              withBorder
               border="1px solid #545454"
               br="8px"
               padding="15px"
@@ -59,6 +62,7 @@ export function SignUp() {
               color="#e9e9e9"
             ></Input>
             <Input
+              withBorder
               bc="#3f3f3f"
               br="8px"
               padding="15px"
@@ -68,7 +72,7 @@ export function SignUp() {
               border="1px solid #545454"
               color="#e9e9e9"
             ></Input>
-            <Area mt="40px">
+            <Area mt="80px">
               <Button
                 color="#191919"
                 br="8px"

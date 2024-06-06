@@ -6,6 +6,8 @@ export const Button = styled.button<ButtonProps>`
   display: flex;
   align-items: center;
   justify-content: center;
+  outline: none;
+  border: 0;
   ${({ fs }) => fs && `font-size: ${fs}`};
   ${({ lh }) => lh && `line-height: ${lh}`};
   ${({ bc }) => bc && `background-color: ${bc}`};
@@ -26,4 +28,5 @@ export interface ButtonProps {
   br?: string;
   bc?: string;
   border?: string;
+  form?: string;
 }
