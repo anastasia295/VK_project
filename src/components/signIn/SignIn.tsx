@@ -1,10 +1,8 @@
 import { Text } from "../../ui/Text";
-
 import { Input } from "../../ui/Input";
 import { Button } from "../../ui/Button";
 import { Flex } from "../../ui/Flex";
 import { NavbarLink } from "../../ui/NavbarLink";
-
 import { Img } from "../img/Img";
 import icon_vk_black from "../img/img/icon_vk_black.png";
 import {

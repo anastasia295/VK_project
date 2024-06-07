@@ -1,3 +1,10 @@
+import { MainPage } from "../mainPage/MainPage";
+import { Text } from "../../ui/Text";
+
 export function Friends() {
-  return <div></div>;
+  return (
+    <MainPage>
+      <div>gbgbt</div>
+    </MainPage>
+  );
 }

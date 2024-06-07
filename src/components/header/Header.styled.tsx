@@ -18,5 +18,3 @@ export const StyledHeaderContainer = styled.div`
   align-items: center;
   box-sizing: content-box;
 `;
-
-export const StyledPageblockVK2 = styled.div``;

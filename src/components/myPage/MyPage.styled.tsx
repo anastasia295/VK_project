@@ -50,7 +50,7 @@ export const StyledPageWall = styled.div`
   border: 1px solid #373737;
 `;
 
-export const StyledPageWall2 = styled.div`
+export const StyledPageRecords = styled.div`
   padding: 20px;
   border-radius: 0px 0px 10px 10px;
   width: 550px;

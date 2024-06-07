@@ -7,7 +7,6 @@ import avatar from "../img/img/avatar.jpg";
 import arrow from "../img/img/arrow.png";
 import loupe from "../img/img/loupe.png";
 import { NavbarLink } from "../../ui/NavbarLink";
-
 import { StyledHeader, StyledHeaderContainer } from "./Header.styled";
 
 export function Header() {

@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Input = styled.input<InputProps>`
   outline: none;
-  border: 1px solid #2c2c2c;
+  border-style: none;
   font-size: 14px;
   ${({ br }) => br && `border-radius: ${br}`};
   ${({ height }) => height && `height: ${height}`};
@@ -10,6 +10,10 @@ export const Input = styled.input<InputProps>`
   ${({ padding }) => padding && `padding: ${padding}`};
   ${({ bc }) => bc && `background-color: ${bc}`};
   ${({ border }) => border && `border: ${border}`};
+  ${({ bbottom }) => bbottom && `border-bottom: ${bbottom}`};
+  ${({ bleft }) => bleft && `border-left: ${bleft}`};
+  ${({ btop }) => btop && `border-top: ${btop}`};
+  ${({ bright }) => bright && `border-right: ${bright}`};
   ${({ width }) => width && `width: ${width}`};
   ${({ withBorder }) =>
     withBorder &&
@@ -30,4 +34,8 @@ export interface InputProps {
   color?: string;
   defaultValue?: string;
   withBorder?: boolean;
+  bbottom?: string;
+  bleft?: string;
+  btop?: string;
+  bright?: string;
 }

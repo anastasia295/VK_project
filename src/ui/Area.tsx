@@ -16,6 +16,7 @@ export const Area = styled.h1<AreaProps>`
   ${({ margin }) => margin && `padding: ${margin}`};
   ${({ bc }) => bc && `background-color: ${bc}`};
   ${({ position }) => position && `position: ${position}`};
+  ${({ br }) => br && `border-radius: ${br}`};
 `;
 
 export interface AreaProps {
@@ -33,5 +34,6 @@ export interface AreaProps {
   bc?: string;
   height?: string;
   width?: string;
+  br?: string;
   position?: "relative" | "absolute" | "fixed" | "sticky";
 }

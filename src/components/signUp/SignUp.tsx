@@ -4,7 +4,6 @@ import { Button } from "../../ui/Button";
 import { Flex } from "../../ui/Flex";
 import { Img } from "../img/Img";
 import icon_vk_black from "../img/img/icon_vk_black.png";
-
 import {
   StyledAppWrapper,
   StyledContainer,
