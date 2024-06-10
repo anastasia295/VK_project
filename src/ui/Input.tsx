@@ -3,7 +3,8 @@ import styled from "styled-components";
 export const Input = styled.input<InputProps>`
   outline: none;
   border-style: none;
-  font-size: 14px;
+  font-size: 12px;
+  position: relative;
   ${({ br }) => br && `border-radius: ${br}`};
   ${({ height }) => height && `height: ${height}`};
   ${({ color }) => color && `color: ${color}`};

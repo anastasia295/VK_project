@@ -26,7 +26,7 @@ export function Header() {
             width="230px"
             height="32px"
           ></Input>
-          <Area ml="-250px">
+          <Area position="absolute" ml="178px">
             <Img width="16px" height="16px" src={loupe}></Img>
           </Area>
         </Flex>

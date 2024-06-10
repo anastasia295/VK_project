@@ -16,7 +16,7 @@ export const StyledPageFriends = styled.div`
   border-radius: 10px;
   height: 550px;
   background: #222222;
-  margin-top: 15px;
+
   padding: 20px;
   border: 1px solid #373737;
 `;
@@ -30,7 +30,7 @@ export const StyledPagePhoto = styled.div`
   border-radius: 10px;
   height: 350px;
   background: #222222;
-  margin-top: 15px;
+
   padding: 20px;
   border: 1px solid #373737;
 `;

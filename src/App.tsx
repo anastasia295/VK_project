@@ -8,6 +8,7 @@ import { Messages } from "./components/messages/Messages";
 import { MyPage } from "./components/myPage/MyPage";
 import { Friends } from "./components/friends/Friends";
 import { Communities } from "./components/communities/Communities";
+import { Photos } from "./components/photos/Photos";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="mypage" element={<MyPage />} />
           <Route path="friends" element={<Friends />} />
           <Route path="communities" element={<Communities />} />
+          <Route path="photos" element={<Photos />} />
         </Routes>
       </BrowserRouter>
     </>

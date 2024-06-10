@@ -29,7 +29,7 @@ export function MyPage() {
   };
   return (
     <MainPage>
-      <Flex>
+      <Flex display="flex" flexdirection="column" gap="15px">
         <StyledPageAvatar>
           <Area ml="20px">
             <Flex display="flex" alignitems="center" gap="15px">
@@ -71,13 +71,13 @@ export function MyPage() {
           <StyledPagePhotoPosts>
             <StyledPagePhoto>
               <Flex display="flex" alignitems="center" gap="20px">
-                <Flex display="flex" gap="5px" alignitems="center">
+                <Flex display="flex" gap="10px" alignitems="center">
                   <Img width="20px" height="20px" src={photo}></Img>
                   <Text fs="15px" color="#dedede">
                     Фото
                   </Text>
                 </Flex>
-                <Flex display="flex" gap="5px" alignitems="center">
+                <Flex display="flex" gap="10px" alignitems="center">
                   <Img width="20px" height="20px" src={albums}></Img>
                   <Text fs="15px" color="#dedede">
                     Альбомы
@@ -119,7 +119,7 @@ export function MyPage() {
                 <div>
                   <Input
                     onClick={onClick}
-                    border="1px solid #545454"
+                    border="1px solid #373737"
                     br="10px"
                     padding="5px 55px"
                     width="550px"
@@ -136,7 +136,7 @@ export function MyPage() {
                 <div>
                   <Textarea
                     wrap="hard"
-                    border="1px solid #545454"
+                    border="1px solid #373737"
                     br="10px"
                     padding="15px 55px"
                     width="550px"
@@ -172,7 +172,7 @@ export function MyPage() {
                 <Text fs="15px" color="#dedede">
                   Мои записи
                 </Text>
-                <Img width="15px" height="15px" src={lens}></Img>{" "}
+                <Img width="16px" height="16px" src={lens}></Img>
               </Flex>
             </StyledPageWall>
             <StyledPageRecords></StyledPageRecords>

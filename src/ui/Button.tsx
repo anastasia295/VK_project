@@ -3,12 +3,15 @@ import React from "react";
 
 export const Button = styled.button<ButtonProps>`
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
   outline: none;
   border: 0;
+  ${({ pt }) => pt && `padding-top: ${pt}`};
+  ${({ pb }) => pb && `padding-bottom: ${pb}`};
+  ${({ pr }) => pr && `padding-right: ${pr}`};
+  ${({ pl }) => pl && `padding-left: ${pl}`};
   ${({ fs }) => fs && `font-size: ${fs}`};
+  ${({ fw }) => fw && `font-weight: ${fw}`};
   ${({ lh }) => lh && `line-height: ${lh}`};
   ${({ bc }) => bc && `background-color: ${bc}`};
   ${({ br }) => br && `border-radius: ${br}`};
@@ -26,7 +29,12 @@ export interface ButtonProps {
   fs?: string;
   lh?: string;
   br?: string;
+  fw?: string;
   bc?: string;
   border?: string;
   form?: string;
+  pt?: string;
+  pl?: string;
+  pb?: string;
+  pr?: string;
 }

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const Img = styled.img<ImgProps>`
+  display: block;
   ${({ height }) => height && `height: ${height}`};
   ${({ width }) => width && `width: ${width}`};
   ${({ br }) => br && `border-radius: ${br}`};

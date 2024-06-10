@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const Textarea = styled.textarea<TextareaProps>`
   outline: none;
-  border: 1px solid #2c2c2c;
+  outline: none;
+  border-style: none;
   resize: none;
   font-size: 14px;
   ${({ br }) => br && `border-radius: ${br}`};
@@ -15,7 +16,6 @@ export const Textarea = styled.textarea<TextareaProps>`
   ${({ wrap }) => wrap && `wrap: ${wrap}`};
 `;
 
-// border: 1px solid #abcdef;
 export interface TextareaProps {
   placeholder?: string;
   width?: string;

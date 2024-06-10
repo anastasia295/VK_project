@@ -4,6 +4,7 @@ import { NavbarLink } from "../../ui/NavbarLink";
 import { Img } from "../../components/img/Img";
 import { Flex } from "../../ui/Flex";
 import messages from "../../components/img/img/messages.png";
+import photosnav from "../../components/img/img/photosnav.png";
 import communities from "../../components/img/img/communities.png";
 import friends from "../../components/img/img/friends.png";
 import myPage from "../../components/img/img/myPage.png";
@@ -36,6 +37,12 @@ export function MainPage({ children }: { children?: React.ReactElement }) {
             <Img width="20px" height="20px" src={communities}></Img>
             <NavbarLink fs="15px" color="white" to="/communities">
               Сообщества
+            </NavbarLink>
+          </Flex>
+          <Flex display="flex" alignitems="center" gap="10px">
+            <Img width="20px" height="18px" src={photosnav}></Img>
+            <NavbarLink fs="15px" color="white" to="/photos">
+              Фотографии
             </NavbarLink>
           </Flex>
           <NavbarLink fs="14px" color="white" to="entrance">
