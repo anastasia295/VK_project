@@ -5,7 +5,7 @@ import { Img } from "../img/Img";
 import avatar from "../../components/img/img/avatar.jpg";
 import { BorderBottom, StyledMessagesWrapper } from "./MessageRepeat.styled";
 
-export function MessagesRepeat(props: { name: string; message: string }) {
+export function MessagesRepeat(props: { name: string; message?: string }) {
   return (
     <StyledMessagesWrapper>
       <Flex display="flex" alignitems="center" gap="10px">

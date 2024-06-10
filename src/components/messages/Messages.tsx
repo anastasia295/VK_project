@@ -12,6 +12,12 @@ import {
 } from "../messages/Messages.styled";
 import { MessagesRepeat } from "./MessageRepeat";
 
+const data = [
+  { name: "Кот Котов", message: "Сообщение" },
+  { name: "Кот Котов", message: "Сообщение" },
+  { name: "Кот Котов", message: "Сообщение" },
+];
+
 export function Messages() {
   return (
     <MainPage>
@@ -31,9 +37,9 @@ export function Messages() {
           <Area position="absolute" mt="-38px" ml="20px">
             <Img src={loupe5} width="20px" height="20px"></Img>
           </Area>
-          <MessagesRepeat name="Кот Котов" message="Сообщение"></MessagesRepeat>
-          <MessagesRepeat name="Кот Котов" message="Сообщение"></MessagesRepeat>
-          <MessagesRepeat name="Кот Котов" message="Сообщение"></MessagesRepeat>
+          {data.map(({ name, message }) => (
+            <MessagesRepeat name={name} message={message} />
+          ))}
         </StyledMessagesСontainer>
         <StyledMessagesNav>
           <StyledAllChats>
