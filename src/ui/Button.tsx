@@ -6,6 +6,7 @@ export const Button = styled.button<ButtonProps>`
   display: block;
   outline: none;
   border: 0;
+  font-family: fantasy;
   ${({ pt }) => pt && `padding-top: ${pt}`};
   ${({ pb }) => pb && `padding-bottom: ${pb}`};
   ${({ pr }) => pr && `padding-right: ${pr}`};

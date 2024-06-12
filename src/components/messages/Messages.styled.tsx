@@ -1,12 +1,10 @@
 import styled from "styled-components";
 
-export const StyledMessagesNav = styled.div`
-  width: 345px;
-  border-radius: 10px;
-  height: 128px;
-  background: #222222;
-  padding: 10px 10px 20px 10px;
-  border: 1px solid #373737;
+export const StyledMessagesContent = styled.div`
+  padding: 0px 15px;
+  &:hover {
+    background: #3a3a3a;
+  }
 `;
 
 export const StyledMessagesСontainer = styled.div`
@@ -19,7 +17,22 @@ export const StyledMessagesСontainer = styled.div`
   border-right: 1px solid #373737;
 `;
 
-export const StyledAllChats = styled.div`
+export const StyledBorderBottom = styled.div`
+  position: absolute;
+  margin-top: 63px;
+  width: 444px;
+  border-bottom: 1px solid #373737;
+`;
+
+export const StyledCardNav = styled.div`
+  width: 345px;
+  border-radius: 10px;
+  height: 128px;
+  background: #222222;
+  padding: 10px 10px 20px 10px;
+  border: 1px solid #373737;
+`;
+export const StyledCardFavorites = styled.div`
   cursor: pointer;
   padding: 10px 15px;
   display: flex;
@@ -28,7 +41,20 @@ export const StyledAllChats = styled.div`
   width: 325px;
   height: 40px;
   border-radius: 10px;
+  &:hover {
+    background: #3a3a3a;
+  }
+`;
 
+export const StyledNav = styled.div`
+  cursor: pointer;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  background: #222222;
+  width: 325px;
+  height: 40px;
+  border-radius: 10px;
   &:hover {
     background: #3a3a3a;
   }

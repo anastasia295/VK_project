@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const Input = styled.input<InputProps>`
   outline: none;
+  font-family: fantasy;
   border-style: none;
   font-size: 12px;
   position: relative;

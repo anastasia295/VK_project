@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import React from "react";
-import { MainPage } from "../components/mainPage/MainPage";
 
 export const Text = styled.h1<TextProps>`
+  font-family: fantasy;
   ${({ fs }) => fs && `font-size: ${fs}`};
   ${({ color }) => color && `color: ${color}`};
   ${({ width }) => width && `width: ${width}`};

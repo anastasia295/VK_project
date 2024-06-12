@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 export const Textarea = styled.textarea<TextareaProps>`
   outline: none;
-  outline: none;
+  font-family: fantasy;
+  overflow: hidden;
   border-style: none;
   resize: none;
   font-size: 14px;
@@ -26,8 +27,6 @@ export interface TextareaProps {
   border?: string;
   color?: string;
   defaultValue?: string;
-
   maxlength?: string;
-
   wrap?: "soft" | "hard";
 }

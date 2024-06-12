@@ -7,10 +7,14 @@ import { Img } from "../img/Img";
 import loupe5 from "../../components/img/img/loupe5.png";
 import {
   StyledMessagesСontainer,
-  StyledMessagesNav,
-  StyledAllChats,
+  StyledMessagesContent,
+  StyledBorderBottom,
+  StyledCardNav,
+  StyledNav,
+  StyledCardFavorites,
 } from "../messages/Messages.styled";
-import { MessagesRepeat } from "./MessageRepeat";
+import { Card } from "../../share/card/Card";
+import { NavbarLink } from "../../ui/NavbarLink";
 
 const data = [
   { name: "Кот Котов", message: "Сообщение" },
@@ -38,21 +42,31 @@ export function Messages() {
             <Img src={loupe5} width="20px" height="20px"></Img>
           </Area>
           {data.map(({ name, message }) => (
-            <MessagesRepeat name={name} message={message} />
+            <NavbarLink to="/Dialogue">
+              <StyledMessagesContent>
+                <Card name={name}>
+                  <Text color="#a0a0a0" fs="12px">
+                    {message}
+                  </Text>
+                  <StyledBorderBottom></StyledBorderBottom>
+                </Card>
+              </StyledMessagesContent>
+            </NavbarLink>
           ))}
         </StyledMessagesСontainer>
-        <StyledMessagesNav>
-          <StyledAllChats>
+
+        <StyledCardNav>
+          <StyledNav>
             <Text fs="13px" color="#dedede">
               Все чаты
             </Text>
-          </StyledAllChats>
-          <StyledAllChats>
+          </StyledNav>
+          <StyledCardFavorites>
             <Text fs="13px" color="#dedede">
               Избранные чаты
             </Text>
-          </StyledAllChats>
-        </StyledMessagesNav>
+          </StyledCardFavorites>
+        </StyledCardNav>
       </Flex>
     </MainPage>
   );

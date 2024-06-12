@@ -16,7 +16,6 @@ export const StyledPageFriends = styled.div`
   border-radius: 10px;
   height: 550px;
   background: #222222;
-
   padding: 20px;
   border: 1px solid #373737;
 `;
@@ -42,7 +41,6 @@ export const StyledPagePosts = styled.div`
 export const StyledPageWall = styled.div`
   margin-top: 15px;
   padding: 20px;
-
   border-radius: 10px 10px 0 0;
   width: 550px;
   background: #222222;
