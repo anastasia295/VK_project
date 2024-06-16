@@ -10,8 +10,25 @@ import {
   StyledPageblockVK,
 } from "./SignUp.styled";
 import { Area } from "../../ui/Area";
+import { useState } from "react";
 
-export function SignUp() {
+export const SignUp = () => {
+  const [data, setData] = useState({});
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+
+    fetch("http://localhost:3001/user/signUp", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        setData(result);
+      });
+  };
+  console.log(data);
   return (
     <StyledAppWrapper>
       <StyledContainer>
@@ -29,27 +46,53 @@ export function SignUp() {
 
             <Area mt="-20px">
               <Text color="#d3d3d3" fs="25px">
-                Введите телефон
+                Введите данные
               </Text>
             </Area>
             <Area mt="-10px">
               <Text width="250px" color="#d3d3d3" fs="15px" textalign="center">
-                Ваш номер телефона будет использоваться для входа в аккаунт
+                Ваша почта будет использоваться для входа в аккаунт
               </Text>
             </Area>
-            <Input
+            <form onSubmit={handleSubmit}>
+              <Input
+                type="text"
+                name="field1"
+                withBorder
+                padding="15px"
+                br="8px"
+                width="304px"
+                height="36px"
+                placeholder="Введите имя"
+                bc="#3f3f3f"
+                border="1px solid #545454"
+                color="#e9e9e9"
+              ></Input>
+              {/* <Input
               withBorder
               padding="15px"
               br="8px"
               width="304px"
               height="36px"
-              placeholder="Введите телефон"
+              placeholder="Введите фамилию"
               bc="#3f3f3f"
               border="1px solid #545454"
               color="#e9e9e9"
-              defaultValue="+7"
-            ></Input>
-            <Input
+            ></Input> */}
+              <Input
+                type="email"
+                name="email"
+                withBorder
+                padding="15px"
+                br="8px"
+                width="304px"
+                height="36px"
+                placeholder="Введите почту"
+                bc="#3f3f3f"
+                border="1px solid #545454"
+                color="#e9e9e9"
+              ></Input>
+              {/* <Input
               withBorder
               border="1px solid #545454"
               br="8px"
@@ -70,21 +113,23 @@ export function SignUp() {
               placeholder="Повторите пароль "
               border="1px solid #545454"
               color="#e9e9e9"
-            ></Input>
-            <Area mt="80px">
-              <Button
-                color="#191919"
-                br="8px"
-                width="304px"
-                height="36px"
-                lh="24px"
-              >
-                Продолжить
-              </Button>
-            </Area>
+            ></Input> */}
+              <Area mt="10px">
+                <Button
+                  type="submit"
+                  color="#191919"
+                  br="8px"
+                  width="304px"
+                  height="36px"
+                  lh="24px"
+                >
+                  Продолжить
+                </Button>
+              </Area>
+            </form>
           </Flex>
         </StyledPageblockVK>
       </StyledContainer>
     </StyledAppWrapper>
   );
-}
+};
