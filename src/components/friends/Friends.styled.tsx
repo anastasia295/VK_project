@@ -44,11 +44,3 @@ export const StyledCardСontainer = styled.div`
   border: 1px solid #373737;
   position: relative;
 `;
-
-export const StyledBorderBottom = styled.div`
-  margin-top: 80px;
-  margin-left: -85px;
-  width: 495px;
-  border-bottom: 1px solid #373737;
-  position: absolute;
-`;

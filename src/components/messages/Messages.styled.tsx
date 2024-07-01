@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const StyledMessagesContent = styled.div`
-  padding: 0px 15px;
+  padding: 0 0 0 15px;
   &:hover {
     background: #3a3a3a;
   }
@@ -15,13 +15,6 @@ export const StyledMessagesСontainer = styled.div`
   border-bottom: 1px solid #373737;
   border-left: 1px solid #373737;
   border-right: 1px solid #373737;
-`;
-
-export const StyledBorderBottom = styled.div`
-  position: absolute;
-  margin-top: 63px;
-  width: 444px;
-  border-bottom: 1px solid #373737;
 `;
 
 export const StyledCardNav = styled.div`

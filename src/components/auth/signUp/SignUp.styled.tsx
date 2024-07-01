@@ -15,7 +15,7 @@ export const StyledContainer = styled.div`
   align-items: center;
 `;
 
-export const StyledAppWrapper = styled.div`
+export const StyledAppWrapper = styled.form`
   width: 100%;
   min-height: 100vh;
   padding: 2rem;

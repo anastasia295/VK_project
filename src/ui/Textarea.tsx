@@ -1,6 +1,10 @@
 import styled from "styled-components";
 
 export const Textarea = styled.textarea<TextareaProps>`
+  overflow: hidden;
+  line-height: 1.2;
+
+  resize: none;
   outline: none;
   font-family: fantasy;
   overflow: hidden;
@@ -14,7 +18,6 @@ export const Textarea = styled.textarea<TextareaProps>`
   ${({ bc }) => bc && `background-color: ${bc}`};
   ${({ border }) => border && `border: ${border}`};
   ${({ width }) => width && `width: ${width}`};
-  ${({ wrap }) => wrap && `wrap: ${wrap}`};
 `;
 
 export interface TextareaProps {
@@ -28,5 +31,6 @@ export interface TextareaProps {
   color?: string;
   defaultValue?: string;
   maxlength?: string;
-  wrap?: "soft" | "hard";
+
+  type?: string;
 }

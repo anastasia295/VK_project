@@ -3,10 +3,14 @@ import React from "react";
 
 export const Text = styled.h1<TextProps>`
   font-family: fantasy;
+  font-size: 14px;
+  color: #bcbcbc;
+
   ${({ fs }) => fs && `font-size: ${fs}`};
   ${({ color }) => color && `color: ${color}`};
   ${({ width }) => width && `width: ${width}`};
   ${({ textalign }) => textalign && `text-align: ${textalign}`};
+  ${({ wb }) => wb && `word-break: ${wb}`};
 `;
 
 export interface TextProps {
@@ -14,6 +18,9 @@ export interface TextProps {
   fs?: string;
   color?: string;
   width?: string;
+  type?: string;
 
+  value?: string | number | readonly string[] | undefined;
   textalign?: "center" | "left" | "right" | "justify";
+  wb?: "break-all" | "keep-all";
 }

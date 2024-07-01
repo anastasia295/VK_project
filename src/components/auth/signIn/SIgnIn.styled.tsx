@@ -1,5 +1,6 @@
 import styled from "styled-components";
-export const StyledAppWrapper = styled.div`
+
+export const StyledAppWrapper = styled.form`
   width: 100%;
   min-height: 100vh;
   padding: 2rem;

@@ -6,6 +6,7 @@ export const Input = styled.input<InputProps>`
   border-style: none;
   font-size: 12px;
   position: relative;
+
   ${({ br }) => br && `border-radius: ${br}`};
   ${({ height }) => height && `height: ${height}`};
   ${({ color }) => color && `color: ${color}`};
@@ -17,6 +18,13 @@ export const Input = styled.input<InputProps>`
   ${({ btop }) => btop && `border-top: ${btop}`};
   ${({ bright }) => bright && `border-right: ${bright}`};
   ${({ width }) => width && `width: ${width}`};
+  ${({ fs }) => fs && `font-size: ${fs}`};
+
+  &::placeholder {
+    ${({ placeholderTextColor }) =>
+      placeholderTextColor && `color: ${placeholderTextColor}`};
+  }
+
   ${({ withBorder }) =>
     withBorder &&
     `&:focus {
@@ -27,17 +35,21 @@ border: 1px solid #abcdef;
 
 export interface InputProps {
   placeholder?: string;
+  placeholderTextColor?: string;
   width?: string;
   height?: string;
   padding?: string;
   br?: string;
+  fs?: string;
   bc?: string;
   border?: string;
   color?: string;
   defaultValue?: string;
   withBorder?: boolean;
+  error?: boolean;
   bbottom?: string;
   bleft?: string;
   btop?: string;
   bright?: string;
+  helperText?: string;
 }

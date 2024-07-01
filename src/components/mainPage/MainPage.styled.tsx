@@ -16,3 +16,18 @@ export const StyledPageContainer = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+export const StyledNavPage = styled.div`
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  width: 160px;
+  height: 30px;
+  border-radius: 5px;
+  &:hover {
+    background: #3a3a3a;
+  }
+`;

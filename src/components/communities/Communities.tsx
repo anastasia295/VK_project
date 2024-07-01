@@ -9,7 +9,6 @@ import {
   StyledCardNav,
   StyledNav,
   StyledCardFavorites,
-  StyledBorderBottom,
 } from "../communities/Communities.styled";
 import { Img } from "../img/Img";
 import { MainPage } from "../mainPage/MainPage";
@@ -21,7 +20,7 @@ const data = [
   { name: "Название сообщества", category: "Животные" },
 ];
 
-export function Communities() {
+export function Communities(props: any) {
   return (
     <MainPage>
       <Flex display="flex" gap="15px">
@@ -63,14 +62,13 @@ export function Communities() {
           </Area>
           {data.map(({ name, category }) => (
             <Area mt="15px">
-              <Card name={name}>
+              <Card hideBorder={false} name={name}>
                 <Text color="#a0a0a0" fs="12px">
                   {category}
                 </Text>
                 <Text color="#a0a0a0" fs="12px">
                   Количество подписчиков
                 </Text>
-                <StyledBorderBottom></StyledBorderBottom>
               </Card>
             </Area>
           ))}
@@ -78,14 +76,10 @@ export function Communities() {
 
         <StyledCardNav>
           <StyledNav>
-            <Text fs="13px" color="#dedede">
-              Мои сообщества
-            </Text>
+            <Text fs="13px">Мои сообщества</Text>
           </StyledNav>
           <StyledCardFavorites>
-            <Text fs="13px" color="#dedede">
-              Избранные сообщества
-            </Text>
+            <Text fs="13px">Избранные сообщества</Text>
           </StyledCardFavorites>
         </StyledCardNav>
       </Flex>

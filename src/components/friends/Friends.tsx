@@ -13,7 +13,6 @@ import {
 import { Img } from "../img/Img";
 import { NavbarLink } from "../../ui/NavbarLink";
 import { MainPage } from "../mainPage/MainPage";
-import { StyledBorderBottom } from "./Friends.styled";
 
 const data = [
   { name: "Кот Котов", category: "Кошачий университет" },
@@ -21,18 +20,14 @@ const data = [
   { name: "Кот Котов", category: "Школа для котов" },
 ];
 
-export function Friends() {
+export function Friends(props: any) {
   return (
     <MainPage>
       <Flex display="flex" gap="15px">
         <StyledCardСontainer>
           <Flex display="flex" gap="15px">
-            <Text color="#dedede" fs="15px">
-              Все друзья
-            </Text>
-            <Text color="#dedede" fs="15px">
-              Важные друзья
-            </Text>
+            <Text fs="15px">Все друзья</Text>
+            <Text fs="15px">Важные друзья</Text>
           </Flex>
           <Area mt="20px">
             <Flex display="flex">
@@ -63,28 +58,23 @@ export function Friends() {
           </Area>
           {data.map(({ name, category }) => (
             <Area mt="15px">
-              <Card name={name}>
+              <Card hideBorder={false} name={name}>
                 <Text color="#a0a0a0" fs="12px">
                   {category}
                 </Text>
                 <NavbarLink to="#" color="#64a1ff" fs="13px">
                   Написать сообщение
                 </NavbarLink>
-                <StyledBorderBottom></StyledBorderBottom>
               </Card>
             </Area>
           ))}
         </StyledCardСontainer>
         <StyledCardNav>
           <StyledNav>
-            <Text fs="13px" color="#dedede">
-              Мои друзья
-            </Text>
+            <Text fs="13px">Мои друзья</Text>
           </StyledNav>
           <StyledCardFavorites>
-            <Text fs="13px" color="#dedede">
-              Избранные друзья
-            </Text>
+            <Text fs="13px">Избранные друзья</Text>
           </StyledCardFavorites>
         </StyledCardNav>
       </Flex>

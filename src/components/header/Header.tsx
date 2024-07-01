@@ -6,10 +6,16 @@ import logo_vk from "../img/img/logo_vk.png";
 import avatar from "../img/img/avatar.jpg";
 import arrow from "../img/img/arrow.png";
 import loupe from "../img/img/loupe.png";
-import { NavbarLink } from "../../ui/NavbarLink";
 import { StyledHeader, StyledHeaderContainer } from "./Header.styled";
+import { useNavigate } from "react-router-dom";
+import axios from "../../utils/axios/axios";
 
 export function Header() {
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    await axios.get("user/logout");
+    navigate("/entrance");
+  };
   return (
     <StyledHeader>
       <StyledHeaderContainer>
@@ -32,9 +38,13 @@ export function Header() {
         </Flex>
         <Flex display="flex" alignitems="center" gap="15px">
           <Img br="50%" width="32px" height="32px" src={avatar}></Img>
-          <NavbarLink fs="14px" color="black" to="#">
-            <Img width="14px" height="11px" src={arrow}></Img>
-          </NavbarLink>
+
+          <Img
+            onClick={handleLogout}
+            width="14px"
+            height="11px"
+            src={arrow}
+          ></Img>
         </Flex>
       </StyledHeaderContainer>
     </StyledHeader>

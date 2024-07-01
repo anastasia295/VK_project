@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import React from "react";
 
-export const Area = styled.h1<AreaProps>`
+export const Area = styled.div<AreaProps>`
   ${({ height }) => height && `height: ${height}`};
   ${({ width }) => width && `width: ${width}`};
   ${({ mt }) => mt && `margin-top: ${mt}`};

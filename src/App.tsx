@@ -1,30 +1,36 @@
-import React from "react";
-import { SignIn } from "./components/signIn/SignIn";
-import { SignUp } from "./components/signUp/SignUp";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Routes } from "react-router-dom";
-import { Page } from "./pages/Page";
 import { Messages } from "./components/messages/Messages";
 import { MyPage } from "./components/myPage/MyPage";
 import { Friends } from "./components/friends/Friends";
 import { Communities } from "./components/communities/Communities";
 import { Photos } from "./components/photos/Photos";
 import { Dialogue } from "./components/dialogue/Dialogue";
+import { Editing } from "./components/editing/Editing";
+import { PersonalData } from "./components/personalData/PersonalData";
+import PrivateRoute from "./utils/router/PrivateRoute";
+import { SignIn } from "./components/auth/signIn/SignIn";
+import { SignUp } from "./components/auth/signUp/SignUp";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Page />} />
           <Route path="entrance" element={<SignIn />} />
-          <Route path="entrance/gregistration" element={<SignUp />} />
-          <Route path="messages" element={<Messages />} />
-          <Route path="mypage" element={<MyPage />} />
-          <Route path="friends" element={<Friends />} />
-          <Route path="communities" element={<Communities />} />
-          <Route path="photos" element={<Photos />} />
-          <Route path="Dialogue" element={<Dialogue />} />
+          <Route path="registration" element={<SignUp />} />
+
+          <Route element={<PrivateRoute />}>
+            <Route path="/" element={<MyPage />} />
+            <Route path="mypage" element={<MyPage />} />
+            <Route path="friends" element={<Friends />} />
+            <Route path="communities" element={<Communities />} />
+            <Route path="photos" element={<Photos />} />
+            <Route path="Dialogue" element={<Dialogue />} />
+            <Route path="editing" element={<Editing />} />
+            <Route path="personalData" element={<PersonalData />} />
+            <Route path="messages" element={<Messages />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>

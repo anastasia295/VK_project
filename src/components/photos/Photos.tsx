@@ -5,28 +5,22 @@ import { Text } from "../../ui/Text";
 import { Img } from "../img/Img";
 import { MainPage } from "../mainPage/MainPage";
 import { StyledPhotosСontainer, StyledPhotos } from "./Photos.styled";
-import uploadPhoto from "../../components/img/img/uploadPhoto.png";
+import uploadPhoto from "../../components/img/img/photo-upload.png";
 export function Photos() {
   return (
     <MainPage>
       <Flex display="flex" gap="15px">
         <StyledPhotosСontainer>
           <Area mt="20px" ml="20px">
-            <Text fs="18px" color="#e1e3e6">
-              Мои фотографии
-            </Text>
+            <Text fs="18px">Мои фотографии</Text>
           </Area>
           <Area mt="20px">
             <Flex display="flex" justifycontent="space-between">
               <Flex display="flex" gap="15px">
                 <Area ml="25px">
-                  <Text fs="14px" color="#e1e3e6">
-                    Фото
-                  </Text>
+                  <Text fs="14px">Фото</Text>
                 </Area>
-                <Text fs="14px" color="#e1e3e6">
-                  Альбомы
-                </Text>
+                <Text fs="14px">Альбомы</Text>
               </Flex>
               <Flex display="flex">
                 <Area mr="20px">
@@ -42,8 +36,8 @@ export function Photos() {
                   </Button>
                 </Area>
 
-                <Area position="absolute" ml="1px" mt="4px">
-                  <Img width="32px" height="20px" src={uploadPhoto}></Img>
+                <Area position="absolute" ml="10px" mt="4px">
+                  <Img width="25px" height="20px" src={uploadPhoto}></Img>
                 </Area>
               </Flex>
             </Flex>

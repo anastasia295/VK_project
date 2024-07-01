@@ -5,16 +5,9 @@ export const NavbarLink = styled(Link)<NavbarLinkProps>`
   display: block;
   font-family: fantasy;
   text-decoration: none;
+
   ${({ fs }) => fs && `font-size: ${fs}`};
   ${({ color }) => color && `color: ${color}`};
-
-  &:hover,
-  &:focus {
-    color: blue;
-  }
-  &:active {
-    color: blue;
-  }
 `;
 
 export interface NavbarLinkProps {

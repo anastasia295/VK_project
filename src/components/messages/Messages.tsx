@@ -8,7 +8,6 @@ import loupe5 from "../../components/img/img/loupe5.png";
 import {
   StyledMessagesСontainer,
   StyledMessagesContent,
-  StyledBorderBottom,
   StyledCardNav,
   StyledNav,
   StyledCardFavorites,
@@ -44,11 +43,10 @@ export function Messages() {
           {data.map(({ name, message }) => (
             <NavbarLink to="/Dialogue">
               <StyledMessagesContent>
-                <Card name={name}>
+                <Card hideBorder={true} name={name}>
                   <Text color="#a0a0a0" fs="12px">
                     {message}
                   </Text>
-                  <StyledBorderBottom></StyledBorderBottom>
                 </Card>
               </StyledMessagesContent>
             </NavbarLink>
@@ -57,14 +55,10 @@ export function Messages() {
 
         <StyledCardNav>
           <StyledNav>
-            <Text fs="13px" color="#dedede">
-              Все чаты
-            </Text>
+            <Text fs="13px">Все чаты</Text>
           </StyledNav>
           <StyledCardFavorites>
-            <Text fs="13px" color="#dedede">
-              Избранные чаты
-            </Text>
+            <Text fs="13px">Избранные чаты</Text>
           </StyledCardFavorites>
         </StyledCardNav>
       </Flex>
