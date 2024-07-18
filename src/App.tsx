@@ -11,6 +11,8 @@ import { PersonalData } from "./components/personalData/PersonalData";
 import PrivateRoute from "./utils/router/PrivateRoute";
 import { SignIn } from "./components/auth/signIn/SignIn";
 import { SignUp } from "./components/auth/signUp/SignUp";
+import { Search } from "./components/search/Search";
+import { PageCopy } from "./components/myPage/PageCopy";
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
             <Route path="editing" element={<Editing />} />
             <Route path="personalData" element={<PersonalData />} />
             <Route path="messages" element={<Messages />} />
+            <Route path="search" element={<Search />} />
+            <Route path="search/user/:id" element={<PageCopy />} />
           </Route>
         </Routes>
       </BrowserRouter>

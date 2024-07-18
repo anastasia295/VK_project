@@ -12,27 +12,35 @@ import { Select } from "../../ui/Select";
 import { Option } from "../../ui/Option";
 import {
   StyledEditing,
+  StyledHoverAvatar,
   StyledEditingСontainer,
   StyledInformation,
   StyledNavPersonal,
   StyledСhangeData,
+  StyledHoverBackground,
+  StyledHoverBackgroundWrapper,
+  StyledChangedButton,
 } from "./Editing.styled";
 import { Img } from "../img/Img";
-import avatar from "../img/img/avatar.jpg";
 import { Textarea } from "../../ui/Textarea";
 import { Button } from "../../ui/Button";
 import axios from "../../utils/axios/axios";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../store/slices/AuthSlice";
 import { RootState } from "../../store/store/Store";
 import { TUser } from "../../types/user";
+import defAvatar from "../../components/img/img/defAvatar.png";
 
 export function Editing() {
+  const filePickerAvatar = useRef<any>(null);
+  const filePickerBackground = useRef<any>(null);
+  const [fileAvatar, setFileAvatar] = useState<any | undefined>();
+  const [fileBackground, setFileBackground] = useState<any | undefined>();
   const dispatch = useDispatch();
-  const [user, setUser] = useState<TUser>(
-    useSelector((state: RootState) => state.auth.user) as TUser
-  );
+  const userData = useSelector((state: RootState) => state.auth.user) as TUser;
+  const [user, setUser] = useState<TUser>(userData);
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -48,28 +56,56 @@ export function Editing() {
       return { ...prev, [fieldName]: e.target.value };
     });
   };
-  const [file, setFile] = useState<any | undefined>();
+  const handlePickAvatar = () => {
+    filePickerAvatar.current.click();
+  };
 
-  function handleChange(event: any) {
-    setFile(event.target.files[0]);
+  function handleChangeAvatar(event: any) {
+    setFileAvatar(event.target.files[0]);
   }
 
-  async function handleSubmit2(event: any) {
-    if (file !== undefined) {
+  const handleUpLoadAvatar = async (event: any) => {
+    if (fileAvatar !== undefined) {
       event.preventDefault();
       const formData = new FormData();
-      formData.append("avatar", file);
-      formData.append("avatar", file.name);
+      formData.append("avatar", fileAvatar);
+      formData.append("avatar", fileAvatar.name);
       const config = {
         headers: {
           "content-type": "multipart/form-data",
         },
       };
       const { data } = await axios.put("user", formData, config);
-      dispatch(updateUser(data.data.avatar));
+      dispatch(updateUser(data.data));
+      setUser(data.data);
     }
+  };
+
+  const handlePickBackground = () => {
+    filePickerBackground.current.click();
+  };
+  function handleChangeBackground(event: any) {
+    setFileBackground(event.target.files[0]);
   }
-  console.log(123, file);
+
+  const handleUpLoadBackground = async (event: any) => {
+    if (fileBackground !== undefined) {
+      event.preventDefault();
+      const formData = new FormData();
+      formData.append("background", fileBackground);
+      formData.append("background", fileBackground.name);
+      const config = {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      };
+      const { data } = await axios.put("user", formData, config);
+      console.log(data.data);
+      dispatch(updateUser(data.data));
+      setUser(data.data);
+    }
+  };
+
   return (
     <MainPage>
       <Flex display="flex" gap="15px">
@@ -79,33 +115,128 @@ export function Editing() {
               <Text fs="15px">Профиль</Text>
             </Area>
             <Area mt="20px" position="relative">
-              <Img src={user.avatar} width="100%" height="150px"></Img>
-              <Area position="absolute" top="25px" right="25px">
-                <Input onChange={handleChange} type="file"></Input>
-                <Button
-                  onClick={handleSubmit2}
-                  type="submit"
+              <Img src={user.background} width="100%" height="150px"></Img>
+            </Area>
+            <StyledСhangeData>
+              <Area position="absolute" top="-95px" right="5px">
+                <StyledChangedButton
                   fs="15px"
                   br="8px"
                   color="#bcbcbc"
-                  bc="#222222"
-                  width="189px"
+                  bc="#3a3a3a"
+                  width="170px"
                   height="32px"
                 >
                   Изменить обложку
-                </Button>
-              </Area>
-            </Area>
+                </StyledChangedButton>
 
-            <StyledСhangeData>
-              <Area position="relative" top="-35px">
-                <Img
-                  src={avatar}
-                  br="50%"
-                  width="92px"
-                  height="92px"
-                  border="4px solid rgba(0,0,0,0.3)"
-                ></Img>
+                <StyledHoverBackground>
+                  <StyledHoverBackgroundWrapper>
+                    <Button
+                      onClick={handlePickBackground}
+                      type="submit"
+                      fs="15px"
+                      br="8px"
+                      color="#bcbcbc"
+                      bc="#3a3a3a"
+                      width="100%"
+                      height="32px"
+                    >
+                      Выбрать файл
+                    </Button>
+                    <Button
+                      onClick={handleUpLoadBackground}
+                      type="submit"
+                      fs="15px"
+                      br="8px"
+                      color="#bcbcbc"
+                      bc="#3a3a3a"
+                      width="100%"
+                      height="32px"
+                    >
+                      Cохранить
+                    </Button>
+                    <Button
+                      type="submit"
+                      fs="15px"
+                      br="8px"
+                      color="#bcbcbc"
+                      bc="#3a3a3a"
+                      width="100%"
+                      height="32px"
+                    >
+                      Удалить
+                    </Button>
+
+                    <Input
+                      ref={filePickerBackground}
+                      opacity="0"
+                      onChange={handleChangeBackground}
+                      type="file"
+                    ></Input>
+                  </StyledHoverBackgroundWrapper>
+                </StyledHoverBackground>
+              </Area>
+              <Area mt="45px" ml="-18px">
+                <Flex display="flex" flexdirection="column" alignitems="center">
+                  <Img
+                    cursor="pointer"
+                    src={user.avatar ? user.avatar : defAvatar}
+                    br="50%"
+                    width="92px"
+                    height="92px"
+                    border="4px solid rgba(0,0,0,0.3)"
+                  ></Img>
+                  <StyledHoverAvatar>
+                    <Button
+                      onClick={handlePickAvatar}
+                      type="submit"
+                      fs="15px"
+                      br="8px"
+                      color="#bcbcbc"
+                      bc="#3a3a3a"
+                      width="120px"
+                      height="32px"
+                    >
+                      Выбрать файл
+                    </Button>
+                    <Button
+                      onClick={handleUpLoadAvatar}
+                      type="submit"
+                      fs="15px"
+                      br="8px"
+                      color="#bcbcbc"
+                      bc="#3a3a3a"
+                      width="120px"
+                      height="32px"
+                    >
+                      Cохранить фото
+                    </Button>
+                    <Button
+                      type="submit"
+                      fs="15px"
+                      br="8px"
+                      color="#bcbcbc"
+                      bc="#3a3a3a"
+                      width="120px"
+                      height="32px"
+                    >
+                      Удалить
+                    </Button>
+                    <Input
+                      height="0px"
+                      width="0px"
+                      ref={filePickerAvatar}
+                      opacity="0"
+                      padding="0px"
+                      margin="0px"
+                      onChange={handleChangeAvatar}
+                      type="file"
+                      overflow="hidden"
+                      lineheight="0"
+                    ></Input>
+                  </StyledHoverAvatar>
+                </Flex>
               </Area>
               <Text fs="15px">
                 {user.firstName} {user.lastName}

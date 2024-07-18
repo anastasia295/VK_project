@@ -11,12 +11,14 @@ export const Text = styled.h1<TextProps>`
   ${({ width }) => width && `width: ${width}`};
   ${({ textalign }) => textalign && `text-align: ${textalign}`};
   ${({ wb }) => wb && `word-break: ${wb}`};
+  ${({ cursor }) => cursor && `cursor: ${cursor}`};
 `;
 
 export interface TextProps {
   children: React.ReactNode;
   fs?: string;
   color?: string;
+  cursor?: string;
   width?: string;
   type?: string;
 

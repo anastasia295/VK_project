@@ -36,8 +36,8 @@ export const SignUp: React.FC = (): JSX.Element => {
           email,
           password,
         };
-        const newUser = await axios.post("user/signUp", userData);
-        dispatch(updateUser(newUser.data));
+        const { data } = await axios.post("user/signUp", userData);
+        dispatch(updateUser(data.data));
         navigate("/entrance");
       } catch (e: any) {
         return e.message;

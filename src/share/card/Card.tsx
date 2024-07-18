@@ -14,6 +14,7 @@ export function Card({ name, children, hideBorder }: TCardProps) {
           <Text color="#dedede" fs="14px">
             {name}
           </Text>
+
           {children}
         </StyledTextWrapper>
       </Flex>

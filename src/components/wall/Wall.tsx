@@ -3,7 +3,6 @@ import { Area } from "../../ui/Area";
 import { Text } from "../../ui/Text";
 import { Img } from "../img/Img";
 import { Textarea } from "../../ui/Textarea";
-import avatar from "../img/img/avatar.jpg";
 import { useRef, useState } from "react";
 import lens from "../img/img/lens.png";
 import { Flex } from "../../ui/Flex";
@@ -18,8 +17,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { postCreate } from "../../store/slices/PostSlice";
 import Post from "./Post";
+import defAvatar from "../../components/img/img/defAvatar.png";
+import { TUser } from "../../types/user";
 
 function Posts(props: any) {
+  const { avatar } = useSelector(
+    (state: RootState) => state.auth.user
+  ) as TUser;
   const posts = useSelector((state: RootState) => state.post.value);
   const dispatch = useDispatch();
 
@@ -33,6 +37,7 @@ function Posts(props: any) {
   };
 
   const handleTextarea = (e: any) => {
+    e.preventDefault();
     setTextPost(e.target.value);
     if (ref.current) {
       ref.current.style.height = "auto";
@@ -42,7 +47,6 @@ function Posts(props: any) {
 
   const handleonclick = (e: any) => {
     if (textPost.length !== 0) {
-      e.preventDefault();
       const newTodo = {
         id: Math.floor(Math.random() * 888888) + 100000,
         name: textPost,
@@ -68,7 +72,12 @@ function Posts(props: any) {
             color="#e9e9e9"
           ></Input>
           <Area position="absolute" mt="-43px" ml="20px">
-            <Img br="50%" width="28px" height="28px" src={avatar}></Img>
+            <Img
+              br="50%"
+              width="28px"
+              height="28px"
+              src={avatar ? avatar : defAvatar}
+            ></Img>
           </Area>
         </div>
       ) : (

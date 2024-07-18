@@ -20,6 +20,7 @@ function Post({ id, name }: any) {
         <Text wb="break-all" fs="13px" width="510px" color="#dedede">
           {name}
         </Text>
+
         <Img
           onClick={handleDelete}
           src={deletion}

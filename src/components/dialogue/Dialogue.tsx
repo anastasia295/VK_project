@@ -5,7 +5,6 @@ import { Img } from "../img/Img";
 import { NavbarLink } from "../../ui/NavbarLink";
 import { MainPage } from "../mainPage/MainPage";
 import backArrow from "../img/img/backArrow.png";
-import avatar from "../img/img/avatar.jpg";
 import cat from "../img/img/cat.png";
 
 import {
@@ -19,8 +18,14 @@ import {
 } from "../dialogue/Dialogue.styled";
 
 import { Textarea } from "../../ui/Textarea";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store/Store";
+import { TUser } from "../../types/user";
 
 export function Dialogue() {
+  const { firstName, lastName, avatar } = useSelector(
+    (state: RootState) => state.auth.user
+  ) as TUser;
   return (
     <MainPage>
       <Flex display="flex" gap="15px">
@@ -44,7 +49,7 @@ export function Dialogue() {
               <Img src={avatar} width="30px" height="30px" br="50%"></Img>
               <Flex display="flex" flexdirection="column">
                 <Text color="#64a1ff" fs="12px">
-                  Кот Котов
+                  {firstName} {lastName}
                 </Text>
                 <Text color="white" fs="12px">
                   Сообщениe

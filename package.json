@@ -52,6 +52,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.6",
     "@types/uniqid": "^5.3.4"
   }
 }

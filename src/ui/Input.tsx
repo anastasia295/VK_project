@@ -8,9 +8,11 @@ export const Input = styled.input<InputProps>`
   position: relative;
 
   ${({ br }) => br && `border-radius: ${br}`};
+  ${({ opacity }) => opacity && `opacity: ${opacity}`};
   ${({ height }) => height && `height: ${height}`};
   ${({ color }) => color && `color: ${color}`};
   ${({ padding }) => padding && `padding: ${padding}`};
+  ${({ margin }) => margin && `margin: ${margin}`};
   ${({ bc }) => bc && `background-color: ${bc}`};
   ${({ border }) => border && `border: ${border}`};
   ${({ bbottom }) => bbottom && `border-bottom: ${bbottom}`};
@@ -19,6 +21,8 @@ export const Input = styled.input<InputProps>`
   ${({ bright }) => bright && `border-right: ${bright}`};
   ${({ width }) => width && `width: ${width}`};
   ${({ fs }) => fs && `font-size: ${fs}`};
+  ${({ overflow }) => overflow && `overflow: ${overflow}`};
+  ${({ lineheight }) => lineheight && `line-height: ${lineheight}`};
 
   &::placeholder {
     ${({ placeholderTextColor }) =>
@@ -37,8 +41,11 @@ export interface InputProps {
   placeholder?: string;
   placeholderTextColor?: string;
   width?: string;
+  margin?: string;
+  opacity?: string;
   height?: string;
   padding?: string;
+  overflow?: "auto" | "hidden" | "scroll" | "visible" | "inherit";
   br?: string;
   fs?: string;
   bc?: string;
@@ -52,4 +59,5 @@ export interface InputProps {
   btop?: string;
   bright?: string;
   helperText?: string;
+  lineheight?: string;
 }

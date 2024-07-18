@@ -4,7 +4,6 @@ import { NavbarLink } from "../../ui/NavbarLink";
 import { MainPage } from "../mainPage/MainPage";
 import { StyledNav, StyledCardFavorites } from "../messages/Messages.styled";
 import { StyledCardNav, StyledPersonalСontainer } from "./PersonalData.styled";
-import avatar from "../img/img/avatar.jpg";
 import { Img } from "../img/Img";
 import { Input } from "../../ui/Input";
 import { Select } from "../../ui/Select";
@@ -53,7 +52,7 @@ export function PersonalData() {
       <Flex display="flex" gap="15px">
         <StyledPersonalСontainer onSubmit={handleSubmit}>
           <Flex display="flex" alignitems="center" gap="15px">
-            <Img src={avatar} br="50%" width="72px" height="72px"></Img>
+            <Img src={user.avatar} br="50%" width="72px" height="72px"></Img>
             <Text fs="18px">
               {user.firstName} {user.lastName}
             </Text>
