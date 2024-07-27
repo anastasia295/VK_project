@@ -25,14 +25,14 @@ import { updateUserNew } from "../../store/slices/NewSlice";
 export const Search: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("");
-  const user = useSelector((state: RootState) => state.newauth.user) as TUser;
+  const user = useSelector((state: RootState) => state.newauth.user) as TUser[];
 
   useEffect(() => {
     async function fethUser() {
       if (searchValue) {
         try {
-          const res = await axios.get(`user/search?key=123${searchValue}`);
-          dispatch(updateUserNew(res.data.data));
+          const { data } = await axios.get(`user/search?key=${searchValue}`);
+          dispatch(updateUserNew(data.data));
         } catch (e: any) {
           return e.message;
         }
@@ -88,7 +88,7 @@ export const Search: React.FC = (): JSX.Element => {
           <Area mt="20px">
             <Text fs="14px">Люди</Text>
             {user.map((el: any) => (
-              <NavbarLink to={"user/" + el.id}>
+              <NavbarLink to={"/user/" + el.id}>
                 <Area mt="15px">
                   <Flex
                     display="flex"

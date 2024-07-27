@@ -3,7 +3,7 @@ import AuthSlice from "../slices/AuthSlice";
 import PostSlice from "../slices/PostSlice";
 import CounterSlice from "../slices/CounterSlice";
 import NewSlice from "../slices/NewSlice";
-import FriendsSlice from "../slices/FriendsSlise";
+import FriendSlice from "../slices/FriendSlice";
 
 const Store = configureStore({
   reducer: {
@@ -11,7 +11,7 @@ const Store = configureStore({
     newauth: NewSlice,
     post: PostSlice,
     like: CounterSlice,
-    friend: FriendsSlice,
+    friend: FriendSlice,
   },
 });
 

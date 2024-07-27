@@ -22,6 +22,10 @@ import defAvatar from "../../components/img/img/defAvatar.png";
 
 export function MyPage() {
   const user = useSelector((state: RootState) => state.auth.user) as TUser;
+  const friend = useSelector(
+    (state: RootState) => state.friend.user
+  ) as TUser[];
+  console.log("friends", friend);
   const { firstName, lastName, status, avatar } = user;
 
   return (
@@ -125,53 +129,35 @@ export function MyPage() {
             <Posts></Posts>
           </StyledPagePhotoPosts>
           <StyledPageFriends>
-            <Text fs="15px">Друзья</Text>
+            <NavbarLink to="/friends">
+              <Text fs="15px">Друзья</Text>
+            </NavbarLink>
             <Area mt="15px">
-              <Flex display="flex" justifycontent="space-between">
-                <Flex
-                  display="flex"
-                  flexdirection="column"
-                  alignitems="center"
-                  gap="5px"
-                >
-                  <Img br="50%" width="64px" height="64px" src={avatar5}></Img>
-                  <Text fs="15px" color="#dedede">
-                    Имя
-                  </Text>
-                </Flex>
-                <Flex
-                  display="flex"
-                  flexdirection="column"
-                  alignitems="center"
-                  gap="5px"
-                >
-                  <Img br="50%" width="64px" height="64px" src={avatar5}></Img>
-                  <Text fs="15px" color="#dedede">
-                    Имя
-                  </Text>
-                </Flex>
-                <Flex
-                  display="flex"
-                  flexdirection="column"
-                  alignitems="center"
-                  gap="5px"
-                >
-                  <Img br="50%" width="64px" height="64px" src={avatar5}></Img>
-                  <Text fs="15px" color="#dedede">
-                    Имя
-                  </Text>
-                </Flex>
-                <Flex
-                  display="flex"
-                  flexdirection="column"
-                  alignitems="center"
-                  gap="5px"
-                >
-                  <Img br="50%" width="64px" height="64px" src={avatar5}></Img>
-                  <Text fs="15px" color="#dedede">
-                    Имя
-                  </Text>
-                </Flex>
+              <Flex display="flex" gap="10px">
+                {!friend
+                  ? null
+                  : friend.map((el: any) => {
+                      return (
+                        <NavbarLink to={"/user/" + el.id}>
+                          <Flex
+                            display="flex"
+                            flexdirection="column"
+                            alignitems="center"
+                            gap="5px"
+                          >
+                            <Img
+                              br="50%"
+                              width="64px"
+                              height="64px"
+                              src={el.avatar ? el.avatar : defAvatar}
+                            ></Img>
+                            <Text fs="15px" color="#dedede">
+                              {el.lastName}
+                            </Text>
+                          </Flex>
+                        </NavbarLink>
+                      );
+                    })}
               </Flex>
             </Area>
           </StyledPageFriends>

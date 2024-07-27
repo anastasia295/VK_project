@@ -4,6 +4,7 @@ import { Text } from "../../ui/Text";
 import { Input } from "../../ui/Input";
 import { Card } from "../../share/card/Card";
 import fre from "../../components/img/img/fre.png";
+import defAvatar from "../../components/img/img/defAvatar.png";
 import {
   StyledCardСontainer,
   StyledCardNav,
@@ -13,14 +14,15 @@ import {
 import { Img } from "../img/Img";
 import { NavbarLink } from "../../ui/NavbarLink";
 import { MainPage } from "../mainPage/MainPage";
-
-const data = [
-  { name: "Кот Котов", category: "Кошачий университет" },
-  { name: "Кот Котов", category: "Котейкин колледж" },
-  { name: "Кот Котов", category: "Школа для котов" },
-];
+import { RootState } from "../../store/store/Store";
+import { useSelector } from "react-redux";
+import { TUser } from "../../types/user";
 
 export function Friends(props: any) {
+  const friend = useSelector(
+    (state: RootState) => state.friend.user
+  ) as TUser[];
+
   return (
     <MainPage>
       <Flex display="flex" gap="15px">
@@ -56,26 +58,39 @@ export function Friends(props: any) {
               </Area>
             </Flex>
           </Area>
-          {data.map(({ name, category }) => (
-            <Area mt="15px">
-              <Card hideBorder={false} name={name}>
-                <Text color="#a0a0a0" fs="12px">
-                  {category}
-                </Text>
-                <NavbarLink to="#" color="#64a1ff" fs="13px">
-                  Написать сообщение
+          {!friend
+            ? null
+            : friend.map(({ firstName, lastName, avatar, id }) => (
+                <NavbarLink to={"/user/" + id}>
+                  <Area mt="15px">
+                    <Card
+                      hideBorder={false}
+                      firstName={firstName}
+                      lastName={lastName}
+                      avatar={avatar ? avatar : defAvatar}
+                    >
+                      <Text color="#a0a0a0" fs="12px">
+                        категория
+                      </Text>
+                      <NavbarLink to="#" color="#64a1ff" fs="13px">
+                        Написать сообщение
+                      </NavbarLink>
+                    </Card>
+                  </Area>
                 </NavbarLink>
-              </Card>
-            </Area>
-          ))}
+              ))}
         </StyledCardСontainer>
         <StyledCardNav>
-          <StyledNav>
-            <Text fs="13px">Мои друзья</Text>
-          </StyledNav>
-          <StyledCardFavorites>
-            <Text fs="13px">Избранные друзья</Text>
-          </StyledCardFavorites>
+          <NavbarLink to="/friends">
+            <StyledNav>
+              <Text fs="13px">Мои друзья</Text>
+            </StyledNav>
+          </NavbarLink>
+          <NavbarLink to="/friendRequests">
+            <StyledCardFavorites>
+              <Text fs="13px">Заявки в друзья</Text>
+            </StyledCardFavorites>
+          </NavbarLink>
         </StyledCardNav>
       </Flex>
     </MainPage>

@@ -13,8 +13,24 @@ import photosnav from "../../components/img/img/photo.svg";
 import communities from "../../components/img/img/communities.svg";
 import friends from "../../components/img/img/friends.svg";
 import myPage from "../../components/img/img/main-page.svg";
+import axios from "../../utils/axios/axios";
+import { friendCreate } from "../../store/slices/FriendSlice";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 export function MainPage({ children }: { children?: React.ReactElement }) {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    async function handleGet() {
+      try {
+        const { data } = await axios.get("friend");
+        dispatch(friendCreate(data.data));
+      } catch (e: any) {
+        return e.message;
+      }
+    }
+    handleGet();
+  }, [dispatch]);
   return (
     <StyledPageWrapper>
       <Header></Header>
@@ -35,7 +51,7 @@ export function MainPage({ children }: { children?: React.ReactElement }) {
           <NavbarLink to="/friends">
             <StyledNavPage>
               <Img width="20px" height="20px" src={friends}></Img>
-              <Text>Друзья</Text>
+              <Text cursor="pointer">Друзья</Text>
             </StyledNavPage>
           </NavbarLink>
           <NavbarLink to="/communities">

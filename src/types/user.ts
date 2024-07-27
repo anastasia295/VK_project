@@ -8,9 +8,6 @@ export type TFamilyStatus =
 
 export type TUser = {
   id: number;
-  map(
-    arg0: (el: any) => import("react/jsx-runtime").JSX.Element
-  ): import("react").ReactNode;
   firstName: string;
   lastName: string;
   email: string;

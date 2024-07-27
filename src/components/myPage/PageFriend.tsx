@@ -15,20 +15,27 @@ import {
   StyledPagePhotoPosts,
   StyledPageRecords,
   StyledPageWall,
-} from "./PageCopy.styled";
+} from "./PageFriend.styled";
 import lens from "../img/img/lens.png";
 import { useEffect, useState } from "react";
 import axios from "../../utils/axios/axios";
 import { useParams } from "react-router-dom";
+import { RootState } from "../../store/store/Store";
+import { TUser } from "../../types/user";
 import { useDispatch, useSelector } from "react-redux";
-import { friendCreate, friendDelete } from "../../store/slices/FriendsSlise";
+import { NavbarLink } from "../../ui/NavbarLink";
 
-export function PageCopy() {
+export function PageFriend() {
   const dispatch = useDispatch();
-
   const [page, setPage] = useState<any>({});
-
+  const friend = useSelector(
+    (state: RootState) => state.friend.user
+  ) as TUser[];
   const { id } = useParams();
+
+  console.log("friend", friend);
+
+  const ids = friend ? friend.map(({ id }) => id) : [];
 
   useEffect(() => {
     async function fethUser() {
@@ -48,53 +55,39 @@ export function PageCopy() {
     if (page.id) {
       try {
         const { data } = await axios.post("friend/", {
-          whom: page.id,
+          whom: id,
         });
-        console.log("добавление", data);
+        console.log("добавление", data.data);
       } catch (e: any) {
         return e.message;
       }
     }
   };
 
-  // const handleDelete = async () => {
-  //   if (page.id) {
-  //     try {
-  //       const res = await axios.delete(`friend/${page.id}`);
+  const handleDelete = async () => {
+    if (page.id) {
+      try {
+        const res = await axios.delete(`friend/${id}`);
 
-  //       console.log("удаление", res.data);
+        console.log("удаление", res.data);
+      } catch (e: any) {
+        return e.message;
+      }
+    }
+  };
+
+  // useEffect(() => {
+  //   async function handleGet() {
+  //     try {
+  //       const { data } = await axios.get(`friend/${16}`);
+  //       console.log(data.data);
   //     } catch (e: any) {
   //       return e.message;
   //     }
   //   }
-  // };
+  //   handleGet();
+  // }, [dispatch]);
 
-  const handleGet = async () => {
-    try {
-      const { data } = await axios.get("friend");
-      console.log("friend", data.data);
-      dispatch(friendCreate(data.data));
-    } catch (e: any) {
-      return e.message;
-    }
-  };
-
-  const handlerequests = async () => {
-    try {
-      const { data } = await axios.get("friend/requests"); //запросы
-      console.log("requests", data.data);
-    } catch (e: any) {
-      return e.message;
-    }
-  };
-  const handleoffers = async () => {
-    try {
-      const { data } = await axios.get("friend/offers"); //предложения
-      console.log("offers", data.data);
-    } catch (e: any) {
-      return e.message;
-    }
-  };
   return (
     <MainPage>
       <Flex display="flex" flexdirection="column" gap="15px">
@@ -105,7 +98,6 @@ export function PageCopy() {
               width="150px"
               height="150px"
               src={page.avatar ? page.avatar : defAvatar}
-              onerror="src='../../components/img/img/avatar5.jpg'"
             ></Img>
             <Flex>
               <Text fs="35px" color="#dedede">
@@ -119,28 +111,6 @@ export function PageCopy() {
 
           <Flex display="flex" gap="5px">
             <Button
-              onClick={handlerequests}
-              fs="15px"
-              br="8px"
-              color="black"
-              bc="#c8c8c8"
-              height="32px"
-              width="100px"
-            >
-              handlerequests
-            </Button>
-            <Button
-              onClick={handleoffers}
-              fs="15px"
-              br="8px"
-              color="black"
-              bc="#c8c8c8"
-              height="32px"
-              width="100px"
-            >
-              handleoffers
-            </Button>
-            {/* <Button
               fs="15px"
               br="8px"
               color="black"
@@ -149,29 +119,32 @@ export function PageCopy() {
               width="100px"
             >
               Сообщение
-            </Button> */}
-            <Button
-              fs="15px"
-              br="8px"
-              color="#bcbcbc"
-              bc="#3a3a3a"
-              height="32px"
-              width="150px"
-              onClick={handleAdd}
-            >
-              Добавить в друзья
             </Button>
-            <Button
-              // onClick={handleDelete}
-              fs="15px"
-              br="8px"
-              color="#bcbcbc"
-              bc="#3a3a3a"
-              width="150px"
-              height="32px"
-            >
-              Удалить из друзей
-            </Button>
+            {ids?.includes(page.id) ? (
+              <Button
+                onClick={handleDelete}
+                fs="15px"
+                br="8px"
+                color="#bcbcbc"
+                bc="#3a3a3a"
+                width="150px"
+                height="32px"
+              >
+                Удалить из друзей
+              </Button>
+            ) : (
+              <Button
+                fs="15px"
+                br="8px"
+                color="#bcbcbc"
+                bc="#3a3a3a"
+                height="32px"
+                width="150px"
+                onClick={handleAdd}
+              >
+                Добавить в друзья
+              </Button>
+            )}
           </Flex>
         </StyledPageAvatar>
         <Flex display="flex" justifycontent="space-between">
@@ -212,44 +185,33 @@ export function PageCopy() {
             <StyledPageRecords></StyledPageRecords>
           </StyledPagePhotoPosts>
           <StyledPageFriends>
-            <Text cursor="pointer" onClick={handleGet} fs="15px">
-              Друзья
-            </Text>
+            <Text fs="15px">Друзья</Text>
             <Area mt="15px">
+              {/* <Flex display="flex" gap="10px">
+                {friend?.map((el: any) => {
+                  return (
+                    <NavbarLink to={"/user/" + el.id}>
+                      <Flex
+                        display="flex"
+                        flexdirection="column"
+                        alignitems="center"
+                        gap="5px"
+                      >
+                        <Img
+                          br="50%"
+                          width="64px"
+                          height="64px"
+                          src={el.avatar ? el.avatar : defAvatar}
+                        ></Img>
+                        <Text fs="15px" color="#dedede">
+                          {el.lastName}
+                        </Text>
+                      </Flex>
+                    </NavbarLink>
+                  );
+                })}
+              </Flex> */}
               <Flex display="flex" justifycontent="space-between">
-                <Flex
-                  display="flex"
-                  flexdirection="column"
-                  alignitems="center"
-                  gap="5px"
-                >
-                  <Img br="50%" width="64px" height="64px" src={avatar5}></Img>
-                  <Text fs="15px" color="#dedede">
-                    Имя
-                  </Text>
-                </Flex>
-                <Flex
-                  display="flex"
-                  flexdirection="column"
-                  alignitems="center"
-                  gap="5px"
-                >
-                  <Img br="50%" width="64px" height="64px" src={avatar5}></Img>
-                  <Text fs="15px" color="#dedede">
-                    Имя
-                  </Text>
-                </Flex>
-                <Flex
-                  display="flex"
-                  flexdirection="column"
-                  alignitems="center"
-                  gap="5px"
-                >
-                  <Img br="50%" width="64px" height="64px" src={avatar5}></Img>
-                  <Text fs="15px" color="#dedede">
-                    Имя
-                  </Text>
-                </Flex>
                 <Flex
                   display="flex"
                   flexdirection="column"
