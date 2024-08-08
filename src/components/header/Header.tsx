@@ -13,7 +13,7 @@ import { RootState } from "../../store/store/Store";
 import { TUser } from "../../types/user";
 import defAvatar from "../../components/img/img/defAvatar.png";
 
-export function Header() {
+export const Header = () => {
   const navigate = useNavigate();
   const handleLogout = async () => {
     await axios.get("user/logout");
@@ -24,7 +24,7 @@ export function Header() {
     (state: RootState) => state.auth.user
   ) as TUser;
 
-  const handleSearch = (event: any) => {
+  const handleSearch = (event: React.KeyboardEvent<HTMLInputElement>) => {
     let key = event.which || event.keyCode;
     if (key === 13) {
       navigate("/search");
@@ -38,7 +38,7 @@ export function Header() {
           <Img width="136px" height="24px" src={logo_vk}></Img>
           <Input
             onKeyPress={handleSearch}
-            withBorder={false}
+            withborder={false}
             border="1px solid #545454"
             br="8px"
             padding="0px 35px"
@@ -70,4 +70,4 @@ export function Header() {
       </StyledHeaderContainer>
     </StyledHeader>
   );
-}
+};

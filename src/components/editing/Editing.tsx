@@ -1,9 +1,6 @@
 import { NavbarLink } from "../../ui/NavbarLink";
 import { MainPage } from "../mainPage/MainPage";
-import {
-  StyledCardNav,
-  StyledCardFavorites,
-} from "../messages/Messages.styled";
+import { StyledCardNav } from "../messages/Messages.styled";
 import { Area } from "../../ui/Area";
 import { Text } from "../../ui/Text";
 import { Flex } from "../../ui/Flex";
@@ -15,7 +12,6 @@ import {
   StyledHoverAvatar,
   StyledEditingСontainer,
   StyledInformation,
-  StyledNavPersonal,
   StyledСhangeData,
   StyledHoverBackground,
   StyledHoverBackgroundWrapper,
@@ -31,8 +27,9 @@ import { updateUser } from "../../store/slices/AuthSlice";
 import { RootState } from "../../store/store/Store";
 import { TUser } from "../../types/user";
 import defAvatar from "../../components/img/img/defAvatar.png";
+import { AxiosError } from "axios";
 
-export function Editing() {
+export const Editing = () => {
   const filePickerAvatar = useRef<any>(null);
   const filePickerBackground = useRef<any>(null);
   const [fileAvatar, setFileAvatar] = useState<any | undefined>();
@@ -46,25 +43,36 @@ export function Editing() {
     try {
       const { data } = await axios.put("user", user);
       dispatch(updateUser(data.data));
-    } catch (e: any) {
-      return e.message;
+    } catch (error) {
+      throw new Error((error as AxiosError).message);
     }
   };
 
-  const onChange = (fieldName: string) => (e: any) => {
-    setUser((prev) => {
-      return { ...prev, [fieldName]: e.target.value };
-    });
-  };
+  const onChange =
+    (fieldName: string) =>
+    (
+      e: React.ChangeEvent<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >
+    ) => {
+      setUser((prev) => {
+        return { ...prev, [fieldName]: e.target.value };
+      });
+    };
   const handlePickAvatar = () => {
     filePickerAvatar.current.click();
   };
 
-  function handleChangeAvatar(event: any) {
-    setFileAvatar(event.target.files[0]);
+  function handleChangeAvatar(event: React.ChangeEvent) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) {
+      return;
+    }
+    const file = input.files[0];
+    setFileAvatar(file);
   }
 
-  const handleUpLoadAvatar = async (event: any) => {
+  const handleUpLoadAvatar = async (event: React.MouseEvent<HTMLElement>) => {
     if (fileAvatar !== undefined) {
       event.preventDefault();
       const formData = new FormData();
@@ -84,11 +92,18 @@ export function Editing() {
   const handlePickBackground = () => {
     filePickerBackground.current.click();
   };
-  function handleChangeBackground(event: any) {
-    setFileBackground(event.target.files[0]);
+  function handleChangeBackground(event: React.ChangeEvent) {
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) {
+      return;
+    }
+    const file = input.files[0];
+    setFileBackground(file);
   }
 
-  const handleUpLoadBackground = async (event: any) => {
+  const handleUpLoadBackground = async (
+    event: React.MouseEvent<HTMLElement>
+  ) => {
     if (fileBackground !== undefined) {
       event.preventDefault();
       const formData = new FormData();
@@ -112,7 +127,9 @@ export function Editing() {
         <StyledEditing onSubmit={handleSubmit}>
           <StyledEditingСontainer>
             <Area mt="20px" ml="20px">
-              <Text fs="15px">Профиль</Text>
+              <Text color="#dedede" fs="15px">
+                Профиль
+              </Text>
             </Area>
             <Area mt="20px" position="relative">
               <Img src={user.background} width="100%" height="150px"></Img>
@@ -122,7 +139,7 @@ export function Editing() {
                 <StyledChangedButton
                   fs="15px"
                   br="8px"
-                  color="#bcbcbc"
+                  color="#dedede"
                   bc="#3a3a3a"
                   width="170px"
                   height="32px"
@@ -238,11 +255,13 @@ export function Editing() {
                   </StyledHoverAvatar>
                 </Flex>
               </Area>
-              <Text fs="15px">
+              <Text color="#dedede" fs="17px">
                 {user.firstName} {user.lastName}
               </Text>
               <NavbarLink to="/personalData">
-                <Text fs="13px">Изменить данные</Text>
+                <Text color="#dedede" fs="13px">
+                  Изменить данные
+                </Text>
               </NavbarLink>
             </StyledСhangeData>
           </StyledEditingСontainer>
@@ -298,7 +317,7 @@ export function Editing() {
                 width="300px"
                 height="30px"
                 br="5px"
-                withBorder={false}
+                withborder={false}
                 border="1px solid #545454"
                 onChange={onChange("city")}
               ></Input>
@@ -317,19 +336,39 @@ export function Editing() {
           </StyledInformation>
         </StyledEditing>
         <StyledCardNav>
-          <NavbarLink to="/personalData">
-            <StyledNavPersonal>
-              <Text fs="14px">Личные данные</Text>
-              <Text color="#a0a0a0" fs="11px">
-                Имя, фамилия, дата рождения, пол
-              </Text>
-            </StyledNavPersonal>
+          <NavbarLink
+            display="flex"
+            flexdirection="column"
+            width="100%"
+            height="40px"
+            br="5px"
+            padding="8px"
+            hidebackground={true}
+            to="/personalData"
+          >
+            <Text color="#dedede" fs="14px">
+              Личные данные
+            </Text>
+            <Text color="#a0a0a0" fs="11px">
+              Имя, фамилия, дата рождения, пол
+            </Text>
           </NavbarLink>
-          <StyledCardFavorites>
-            <Text fs="13px">Профиль</Text>
-          </StyledCardFavorites>
+          <NavbarLink
+            background=" #3a3a3a"
+            display="flex"
+            alignitems="center"
+            width="100%"
+            height="40px"
+            br="5px"
+            padding="8px"
+            to="#"
+          >
+            <Text color="#dedede" fs="13px">
+              Профиль
+            </Text>
+          </NavbarLink>
         </StyledCardNav>
       </Flex>
     </MainPage>
   );
-}
+};

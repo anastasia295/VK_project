@@ -6,7 +6,8 @@ import { Img } from "../img/Img";
 import { MainPage } from "../mainPage/MainPage";
 import { StyledPhotosСontainer, StyledPhotos } from "./Photos.styled";
 import uploadPhoto from "../../components/img/img/photo-upload.png";
-export function Photos() {
+
+export const Photos = () => {
   return (
     <MainPage>
       <Flex display="flex" gap="15px">
@@ -47,4 +48,4 @@ export function Photos() {
       </Flex>
     </MainPage>
   );
-}
+};

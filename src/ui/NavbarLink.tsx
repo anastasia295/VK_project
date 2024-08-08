@@ -2,15 +2,42 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 
 export const NavbarLink = styled(Link)<NavbarLinkProps>`
-  display: block;
+  cursor: pointer;
   font-family: fantasy;
   text-decoration: none;
-
+  margin-top: 4px;
   ${({ fs }) => fs && `font-size: ${fs}`};
+  ${({ background }) => background && `background: ${background}`};
   ${({ color }) => color && `color: ${color}`};
+  ${({ padding }) => padding && `padding: ${padding}`};
+  ${({ width }) => width && `width: ${width}`};
+  ${({ height }) => height && `height: ${height}`};
+  ${({ br }) => br && `border-radius: ${br}`};
+  ${({ height }) => height && `height: ${height}`};
+  ${({ display }) => display && `display: ${display}`};
+  ${({ alignitems }) => alignitems && `align-items: ${alignitems}`};
+  ${({ flexdirection }) => flexdirection && `flex-direction: ${flexdirection}`};
+  ${({ gap }) => gap && `gap: ${gap}`};
+
+  ${({ hidebackground }) =>
+    hidebackground &&
+    `  &:hover {
+      background: #3a3a3a;
+    }
+`};
 `;
 
 export interface NavbarLinkProps {
   fs?: string;
   color?: string;
+  hidebackground?: boolean;
+  padding?: string;
+  width?: string;
+  height?: string;
+  br?: string;
+  display?: string;
+  background?: string;
+  alignitems?: string;
+  flexdirection?: string;
+  gap?: string;
 }

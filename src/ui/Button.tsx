@@ -20,6 +20,8 @@ export const Button = styled.button<ButtonProps>`
   ${({ color }) => color && `color: ${color}`};
   ${({ border }) => border && `border: ${border}`};
   ${({ width }) => width && `width: ${width}`};
+  ${({ display }) => display && `display: ${display}`};
+  ${({ disabled }) => disabled && `cursor: not-allowed;`};
 `;
 
 export interface ButtonProps {
@@ -38,4 +40,5 @@ export interface ButtonProps {
   pl?: string;
   pb?: string;
   pr?: string;
+  display?: string;
 }

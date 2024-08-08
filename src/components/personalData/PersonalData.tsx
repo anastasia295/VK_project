@@ -2,7 +2,6 @@ import { Flex } from "../../ui/Flex";
 import { Text } from "../../ui/Text";
 import { NavbarLink } from "../../ui/NavbarLink";
 import { MainPage } from "../mainPage/MainPage";
-import { StyledNav, StyledCardFavorites } from "../messages/Messages.styled";
 import { StyledCardNav, StyledPersonalСontainer } from "./PersonalData.styled";
 import { Img } from "../img/Img";
 import { Input } from "../../ui/Input";
@@ -16,8 +15,9 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "../../utils/axios/axios";
 import { FormEvent, useState } from "react";
 import { updateUser } from "../../store/slices/AuthSlice";
+import { AxiosError } from "axios";
 
-export function PersonalData() {
+export const PersonalData = () => {
   const dispatch = useDispatch();
   const [user, setUser] = useState<TUser>(
     useSelector((state: RootState) => state.auth.user) as TUser
@@ -26,10 +26,9 @@ export function PersonalData() {
     e.preventDefault();
     try {
       const { data } = await axios.put("user", user);
-
       dispatch(updateUser(data.data));
-    } catch (e: any) {
-      return e.message;
+    } catch (error) {
+      throw new Error((error as AxiosError).message);
     }
   };
 
@@ -41,19 +40,13 @@ export function PersonalData() {
       });
     };
 
-  // const onChangeFirstName = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setUser((prev) => {
-  //     return { ...prev, firstName: e.target.value };
-  //   });
-  // };
-
   return (
     <MainPage>
       <Flex display="flex" gap="15px">
         <StyledPersonalСontainer onSubmit={handleSubmit}>
           <Flex display="flex" alignitems="center" gap="15px">
             <Img src={user.avatar} br="50%" width="72px" height="72px"></Img>
-            <Text fs="18px">
+            <Text color="#dedede" fs="18px">
               {user.firstName} {user.lastName}
             </Text>
           </Flex>
@@ -69,7 +62,7 @@ export function PersonalData() {
                   Имя
                 </Text>
                 <Input
-                  withBorder={true}
+                  withborder={true}
                   border="1px solid #545454"
                   br="8px"
                   fs="16px"
@@ -88,7 +81,7 @@ export function PersonalData() {
                   Фамилия
                 </Text>
                 <Input
-                  withBorder={true}
+                  withborder={true}
                   border="1px solid #545454"
                   br="8px"
                   fs="16px"
@@ -108,7 +101,7 @@ export function PersonalData() {
                 </Text>
                 <Select
                   value={user.gender}
-                  withBorder={true}
+                  withborder={true}
                   border="1px solid #545454"
                   bc="#222222"
                   color="#bcbcbc"
@@ -131,7 +124,7 @@ export function PersonalData() {
                 </Text>
                 <Input
                   value={user.birthday}
-                  withBorder={true}
+                  withborder={true}
                   border="1px solid #545454"
                   br="8px"
                   fs="16px"
@@ -164,21 +157,39 @@ export function PersonalData() {
           </Area>
         </StyledPersonalСontainer>
         <StyledCardNav>
-          <StyledNav>
-            <NavbarLink to="#">
-              <Text fs="14px">Личные данные</Text>
-              <Text color="#a0a0a0" fs="11px">
-                Имя, фамилия, дата рождения, пол
-              </Text>
-            </NavbarLink>
-          </StyledNav>
-          <NavbarLink to="/editing">
-            <StyledCardFavorites>
-              <Text fs="13px">Профиль</Text>
-            </StyledCardFavorites>
+          <NavbarLink
+            display="flex"
+            background=" #3a3a3a"
+            flexdirection="column"
+            width="100%"
+            height="40px"
+            br="5px"
+            padding="8px"
+            to="#"
+          >
+            <Text color="#dedede" fs="14px">
+              Личные данные
+            </Text>
+            <Text color="#a0a0a0" fs="11px">
+              Имя, фамилия, дата рождения, пол
+            </Text>
+          </NavbarLink>
+          <NavbarLink
+            display="flex"
+            alignitems="center"
+            width="100%"
+            height="40px"
+            br="5px"
+            padding="8px"
+            hidebackground={true}
+            to="/editing"
+          >
+            <Text color="#dedede" fs="13px">
+              Профиль
+            </Text>
           </NavbarLink>
         </StyledCardNav>
       </Flex>
     </MainPage>
   );
-}
+};

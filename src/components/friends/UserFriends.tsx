@@ -2,44 +2,38 @@ import { Area } from "../../ui/Area";
 import { Flex } from "../../ui/Flex";
 import { Text } from "../../ui/Text";
 import { Input } from "../../ui/Input";
+
 import { Card } from "../../share/card/Card";
 import fre from "../../components/img/img/fre.png";
 import defAvatar from "../../components/img/img/defAvatar.png";
-import { StyledCardСontainer, StyledCardNav } from "../friends/Friends.styled";
+import { StyledCardСontainer, StyledCardNav } from "./Friends.styled";
 import { Img } from "../img/Img";
 import { NavbarLink } from "../../ui/NavbarLink";
 import { MainPage } from "../mainPage/MainPage";
-import axios from "../../utils/axios/axios";
 import { useEffect, useState } from "react";
+import axios from "../../utils/axios/axios";
+import { useParams } from "react-router-dom";
 import { AxiosError } from "axios";
 import { TUser } from "../../types/user";
 
-export const Friends = () => {
-  const [friends, setFriends] = useState([]);
+export const UserFriends = () => {
+  const [page, setPage] = useState<TUser>({} as TUser);
+  const { id } = useParams();
 
   useEffect(() => {
-    async function fethFriend() {
-      try {
-        const { data } = await axios.get("friend");
-        setFriends(data.data);
-      } catch (error) {
-        throw new Error((error as AxiosError).message);
+    async function fethUser() {
+      if (id) {
+        try {
+          const { data } = await axios.get(`user/${id}`);
+          console.log(data);
+          setPage(data.data);
+        } catch (error) {
+          throw new Error((error as AxiosError).message);
+        }
       }
     }
-    fethFriend();
-  }, []);
-
-  const handleDelete = async (id: number) => {
-    if (id) {
-      try {
-        await axios.delete(`friend/${id}`);
-        const filterFriends = friends.filter((el: TUser) => el.id !== id);
-        setFriends(filterFriends);
-      } catch (error) {
-        throw new Error((error as AxiosError).message);
-      }
-    }
-  };
+    fethUser();
+  }, [id]);
 
   return (
     <MainPage>
@@ -50,7 +44,7 @@ export const Friends = () => {
               Все друзья
             </Text>
             <Text color="#dedede" fs="15px">
-              Важные друзья
+              Общие друзья
             </Text>
           </Flex>
           <Area mt="20px">
@@ -80,47 +74,55 @@ export const Friends = () => {
               </Area>
             </Flex>
           </Area>
-          {friends.map((el: TUser) => (
-            <NavbarLink key={el.id} to={"/" + el.id}>
-              <Area mt="15px">
-                <Card
-                  key={el.id}
-                  hideBorder={false}
-                  firstName={el.firstName}
-                  lastName={el.lastName}
-                  avatar={el.avatar ? el.avatar : defAvatar}
-                >
-                  <Flex display="flex" gap="20px">
-                    <NavbarLink to="#" color="#64a1ff" fs="13px">
-                      Написать сообщение
-                    </NavbarLink>
-                    <NavbarLink
-                      onClick={() => handleDelete(el.id)}
-                      to="#"
-                      color="#64a1ff"
-                      fs="13px"
-                    >
-                      Удалить из друзей
-                    </NavbarLink>
-                  </Flex>
-                </Card>
-              </Area>
-            </NavbarLink>
-          ))}
+          {page.friends?.map((el: TUser) => {
+            return (
+              <NavbarLink to={"/" + el.id}>
+                <Area mt="15px">
+                  <Card
+                    key={el.id}
+                    hideBorder={false}
+                    firstName={el.firstName}
+                    lastName={el.lastName}
+                    avatar={el.avatar ? el.avatar : defAvatar}
+                  >
+                    <Flex display="flex" gap="15px">
+                      <NavbarLink to="#" color="#64a1ff" fs="13px">
+                        Написать сообщение
+                      </NavbarLink>
+                      <NavbarLink to="#" color="#64a1ff" fs="13px">
+                        Добавить в друзья
+                      </NavbarLink>
+                    </Flex>
+                  </Card>
+                </Area>
+              </NavbarLink>
+            );
+          })}
         </StyledCardСontainer>
         <StyledCardNav>
           <NavbarLink
             display="flex"
             width="100%"
-            height="30px"
+            height="50px"
             br="5px"
             padding="8px"
-            background="#3a3a3a"
-            to="/friends"
+            hidebackground={true}
+            to={"/" + page.id}
           >
-            <Text color="#dedede" fs="13px">
-              Мои друзья
-            </Text>
+            <Flex display="flex" gap="10px">
+              <Img
+                src={page.avatar ? page.avatar : defAvatar}
+                width="34px"
+                height="34px"
+                br="50%"
+              ></Img>
+              <Text color="#64a1ff" fs="13px">
+                {page.firstName} {page.lastName}
+                <Text color="#a0a0a0" fs="12px">
+                  Перейти к страницe
+                </Text>
+              </Text>
+            </Flex>
           </NavbarLink>
           <NavbarLink
             display="flex"
@@ -129,13 +131,14 @@ export const Friends = () => {
             br="5px"
             padding="8px"
             hidebackground={true}
-            to="/friendRequests"
+            to={"/" + id + "/friends"}
           >
             <Text color="#dedede" fs="13px">
-              Заявки в друзья
+              Друзья {page.firstName}
             </Text>
           </NavbarLink>
         </StyledCardNav>
+        ;
       </Flex>
     </MainPage>
   );

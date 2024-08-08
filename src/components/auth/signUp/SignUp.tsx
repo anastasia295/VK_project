@@ -17,7 +17,7 @@ import {
 } from "./SignUp.styled";
 import axios from "../../../utils/axios/axios";
 
-export const SignUp: React.FC = (): JSX.Element => {
+export const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -26,7 +26,7 @@ export const SignUp: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (password === repeatPassword) {
       try {
@@ -75,7 +75,7 @@ export const SignUp: React.FC = (): JSX.Element => {
 
             <Input
               type="text"
-              withBorder
+              withborder={true}
               padding="15px"
               br="8px"
               width="304px"
@@ -85,10 +85,12 @@ export const SignUp: React.FC = (): JSX.Element => {
               border="1px solid #545454"
               color="#e9e9e9"
               required
-              onChange={(e: any) => setLastName(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setLastName(e.target.value)
+              }
             ></Input>
             <Input
-              withBorder
+              withborder={true}
               padding="15px"
               br="8px"
               width="304px"
@@ -98,11 +100,13 @@ export const SignUp: React.FC = (): JSX.Element => {
               border="1px solid #545454"
               color="#e9e9e9"
               required
-              onChange={(e: any) => setFirstName(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setFirstName(e.target.value)
+              }
             ></Input>
             <Input
               type="email"
-              withBorder
+              withborder={true}
               padding="15px"
               br="8px"
               width="304px"
@@ -112,11 +116,13 @@ export const SignUp: React.FC = (): JSX.Element => {
               border="1px solid #545454"
               color="#e9e9e9"
               required
-              onChange={(e: any) => setEmail(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setEmail(e.target.value)
+              }
             ></Input>
             <Input
               type="password"
-              withBorder
+              withborder={true}
               border="1px solid #545454"
               br="8px"
               padding="15px"
@@ -126,11 +132,13 @@ export const SignUp: React.FC = (): JSX.Element => {
               bc="#3f3f3f"
               color="#e9e9e9"
               required
-              onChange={(e: any) => setPassword(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setPassword(e.target.value)
+              }
             ></Input>
             <Input
               type="password"
-              withBorder
+              withborder={true}
               bc="#3f3f3f"
               br="8px"
               padding="15px"
@@ -140,7 +148,9 @@ export const SignUp: React.FC = (): JSX.Element => {
               required
               border="1px solid #545454"
               color="#e9e9e9"
-              onChange={(e: any) => setRepeatPassword(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setRepeatPassword(e.target.value)
+              }
             ></Input>
             <Area mt="10px">
               <Button

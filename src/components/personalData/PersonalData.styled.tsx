@@ -5,7 +5,7 @@ export const StyledCardNav = styled.div`
   border-radius: 10px;
   height: 128px;
   background: #222222;
-  padding: 10px 10px 20px 10px;
+  padding: 20px 15px;
   border: 1px solid #373737;
 `;
 

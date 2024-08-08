@@ -6,43 +6,81 @@ import { Img } from "../img/Img";
 import fre from "../../components/img/img/fre.png";
 import defAvatar from "../../components/img/img/defAvatar.png";
 import { MainPage } from "../mainPage/MainPage";
-import {
-  StyledCardFavorites,
-  StyledCardNav,
-  StyledCardСontainer,
-  StyledNav,
-} from "./Search.styled";
+import { StyledCardNav, StyledCardСontainer } from "./Search.styled";
 import axios from "../../utils/axios/axios";
 import { useEffect, useState } from "react";
 import debounce from "lodash/debounce";
 import { NavbarLink } from "../../ui/NavbarLink";
 import { Button } from "../../ui/Button";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../store/store/Store";
-import { TUser } from "../../types/user";
-import { updateUserNew } from "../../store/slices/NewSlice";
+import { AxiosError } from "axios";
+import { TFriendStatusAll, TUser } from "../../types/user";
 
-export const Search: React.FC = (): JSX.Element => {
-  const dispatch = useDispatch();
+export const Search = () => {
   const [searchValue, setSearchValue] = useState("");
-  const user = useSelector((state: RootState) => state.newauth.user) as TUser[];
+  const [user, setUser] = useState<TUser[]>([]);
 
   useEffect(() => {
     async function fethUser() {
       if (searchValue) {
         try {
           const { data } = await axios.get(`user/search?key=${searchValue}`);
-          dispatch(updateUserNew(data.data));
-        } catch (e: any) {
-          return e.message;
+          setUser(data.data);
+        } catch (error) {
+          throw new Error((error as AxiosError).message);
         }
       }
     }
-    fethUser();
-  }, [searchValue, dispatch]);
 
-  const handleSearch = (value: any) => {
+    fethUser();
+  }, [searchValue]);
+
+  const handleSearch = (value: string) => {
     setSearchValue(value);
+  };
+
+  const handleAdd = async (id: number, friendStatus: string) => {
+    if (id) {
+      try {
+        await axios.post("friend/", {
+          whom: id,
+        });
+        const newFriendStatus = user.map((el: any) => {
+          if (el.id === id && friendStatus === "none") {
+            return { ...el, friendStatus: "request" };
+          } else if (el.id === id && friendStatus === "offer") {
+            return { ...el, friendStatus: "friend" };
+          } else {
+            return el;
+          }
+        });
+        setUser(newFriendStatus);
+      } catch (error) {
+        throw new Error((error as AxiosError).message);
+      }
+    }
+  };
+
+  const handleDelete = async (id: number, friendStatus: string) => {
+    if (id) {
+      try {
+        await axios.delete(`friend/${id}`);
+        const newFriendStatus = user.map((el: any) => {
+          if (el.id === id && friendStatus === "request") {
+            return { ...el, friendStatus: "none" };
+          } else if (el.id === id && friendStatus === "offer") {
+            return { ...el, friendStatus: "none" };
+          } else if (el.id === id && friendStatus === "friend") {
+            return { ...el, friendStatus: "none" };
+          } else {
+            return el;
+          }
+        });
+        console.log(newFriendStatus, "friendstatus");
+        setUser(newFriendStatus);
+      } catch (error) {
+        throw new Error((error as AxiosError).message);
+      }
+    }
   };
 
   return (
@@ -52,13 +90,13 @@ export const Search: React.FC = (): JSX.Element => {
           <Flex display="flex" gap="15px">
             <Text fs="17px">Поиск</Text>
           </Flex>
-
           <Area mt="20px">
             <Flex display="flex">
               <Input
                 type="search"
                 onChange={debounce(
-                  (e: any) => handleSearch(e.target.value),
+                  (e: React.ChangeEvent<HTMLInputElement>) =>
+                    handleSearch(e.target.value),
                   2000
                 )}
                 bleft="1px solid #373737"
@@ -87,14 +125,14 @@ export const Search: React.FC = (): JSX.Element => {
           </Area>
           <Area mt="20px">
             <Text fs="14px">Люди</Text>
-            {user.map((el: any) => (
-              <NavbarLink to={"/user/" + el.id}>
-                <Area mt="15px">
-                  <Flex
-                    display="flex"
-                    alignitems="center"
-                    justifycontent="space-between"
-                  >
+            {user?.map((el: TUser) => (
+              <Area mt="15px">
+                <Flex
+                  display="flex"
+                  alignitems="center"
+                  justifycontent="space-between"
+                >
+                  <NavbarLink key={el.id} to={"/" + el.id}>
                     <Flex display="flex" alignitems="center" gap="10px">
                       <Img
                         br="50%"
@@ -112,29 +150,100 @@ export const Search: React.FC = (): JSX.Element => {
                         </NavbarLink>
                       </Flex>
                     </Flex>
-
+                  </NavbarLink>
+                  {el.friendStatus === "offer" ? (
+                    <Flex display="flex" gap="5px">
+                      <Button
+                        onClick={() => handleAdd(el.id, el.friendStatus)}
+                        fs="15px"
+                        br="8px"
+                        color="black"
+                        bc="#c8c8c8"
+                        height="32px"
+                        width="130px"
+                      >
+                        Принять заявку
+                      </Button>
+                      <Button
+                        onClick={() => handleDelete(el.id, el.friendStatus)}
+                        fs="15px"
+                        br="8px"
+                        color="#bcbcbc"
+                        bc="#3a3a3a"
+                        height="32px"
+                        width="130px"
+                      >
+                        Отклонить
+                      </Button>
+                    </Flex>
+                  ) : el.friendStatus === "none" ? (
                     <Button
+                      onClick={() => handleAdd(el.id, el.friendStatus)}
+                      fs="15px"
                       br="8px"
-                      width="134px"
-                      height="28px"
-                      bc="#3f3f3f"
-                      fs="12px"
+                      color="#bcbcbc"
+                      bc="#3a3a3a"
+                      height="32px"
+                      width="150px"
                     >
                       Добавить в друзья
                     </Button>
-                  </Flex>
-                </Area>
-              </NavbarLink>
+                  ) : el.friendStatus === "friend" ? (
+                    <Button
+                      onClick={() => handleDelete(el.id, el.friendStatus)}
+                      fs="15px"
+                      br="8px"
+                      color="#bcbcbc"
+                      bc="#3a3a3a"
+                      width="150px"
+                      height="32px"
+                    >
+                      Удалить из друзей
+                    </Button>
+                  ) : el.friendStatus === "me" ? (
+                    <div></div>
+                  ) : (
+                    <Button
+                      onClick={() => handleDelete(el.id, el.friendStatus)}
+                      fs="15px"
+                      br="8px"
+                      color="#bcbcbc"
+                      bc="#3a3a3a"
+                      height="32px"
+                      width="200px"
+                    >
+                      Отменить заявку
+                    </Button>
+                  )}
+                </Flex>
+              </Area>
             ))}
           </Area>
         </StyledCardСontainer>
         <StyledCardNav>
-          <StyledNav>
+          <NavbarLink
+            to={"#"}
+            display="flex"
+            width="160px"
+            height="30px"
+            br="5px"
+            padding="8px"
+            hidebackground={true}
+          >
             <Text fs="13px">Все</Text>
-          </StyledNav>
-          <StyledCardFavorites>
+          </NavbarLink>
+
+          <NavbarLink
+            to={"#"}
+            display="flex"
+            width="160px"
+            height="30px"
+            br="5px"
+            padding="8px"
+            hidebackground={true}
+          >
             <Text fs="13px">Люди</Text>
-          </StyledCardFavorites>
+          </NavbarLink>
         </StyledCardNav>
       </Flex>
     </MainPage>

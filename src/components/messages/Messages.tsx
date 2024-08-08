@@ -9,8 +9,6 @@ import {
   StyledMessagesСontainer,
   StyledMessagesContent,
   StyledCardNav,
-  StyledNav,
-  StyledCardFavorites,
 } from "../messages/Messages.styled";
 import { Card } from "../../share/card/Card";
 import { NavbarLink } from "../../ui/NavbarLink";
@@ -20,8 +18,7 @@ const data = [
   { name: "Кот Котов", message: "Сообщение" },
   { name: "Кот Котов", message: "Сообщение" },
 ];
-
-export function Messages() {
+export const Messages = () => {
   return (
     <MainPage>
       <Flex display="flex" gap="15px">
@@ -41,27 +38,41 @@ export function Messages() {
             <Img src={loupe5} width="20px" height="20px"></Img>
           </Area>
           {data.map(({ name, message }) => (
-            <NavbarLink to="/Dialogue">
-              <StyledMessagesContent>
-                <Card hideBorder={true} name={name}>
-                  <Text color="#a0a0a0" fs="12px">
-                    {message}
-                  </Text>
-                </Card>
-              </StyledMessagesContent>
-            </NavbarLink>
+            <StyledMessagesContent>
+              <Card hideBorder={true} name={name}>
+                <Text color="#a0a0a0" fs="12px">
+                  {message}
+                </Text>
+              </Card>
+            </StyledMessagesContent>
           ))}
         </StyledMessagesСontainer>
 
         <StyledCardNav>
-          <StyledNav>
+          <NavbarLink
+            background=" #3a3a3a"
+            display="flex"
+            width="100%"
+            height="30px"
+            br="5px"
+            padding="8px"
+            to={"#"}
+          >
             <Text fs="13px">Все чаты</Text>
-          </StyledNav>
-          <StyledCardFavorites>
-            <Text fs="13px">Избранные чаты</Text>
-          </StyledCardFavorites>
+          </NavbarLink>
+          <NavbarLink
+            display="flex"
+            width="100%"
+            height="30px"
+            br="5px"
+            padding="8px"
+            to={"#"}
+            hidebackground={true}
+          >
+            <Text fs="13px">Избранные чаты</Text>{" "}
+          </NavbarLink>
         </StyledCardNav>
       </Flex>
     </MainPage>
   );
-}
+};

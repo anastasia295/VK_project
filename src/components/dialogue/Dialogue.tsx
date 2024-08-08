@@ -13,8 +13,6 @@ import {
   StyledDialogueBottom,
   StyledDialogueMessages,
   StyledCardNav,
-  StyledNav,
-  StyledCardFavorites,
 } from "../dialogue/Dialogue.styled";
 
 import { Textarea } from "../../ui/Textarea";
@@ -22,7 +20,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/store/Store";
 import { TUser } from "../../types/user";
 
-export function Dialogue() {
+export const Dialogue = () => {
   const { firstName, lastName, avatar } = useSelector(
     (state: RootState) => state.auth.user
   ) as TUser;
@@ -39,7 +37,7 @@ export function Dialogue() {
                 </Text>
               </Flex>
             </NavbarLink>
-            <NavbarLink fs="14px" color="white" to="/mypage">
+            <NavbarLink fs="14px" color="white" to="/:id">
               Кошка Котова
             </NavbarLink>
             <Img src={cat} width="30px" height="30px" br="50%"></Img>
@@ -86,18 +84,15 @@ export function Dialogue() {
           </StyledDialogueBottom>
         </StyledDialogСontainer>
         <StyledCardNav>
-          <StyledNav>
-            <Text fs="13px" color="#dedede">
-              Все чаты
-            </Text>
-          </StyledNav>
-          <StyledCardFavorites>
-            <Text fs="13px" color="#dedede">
-              Кошка Котова
-            </Text>
-          </StyledCardFavorites>
+          <Text fs="13px" color="#dedede">
+            Все чаты
+          </Text>
+
+          <Text fs="13px" color="#dedede">
+            Кошка Котова
+          </Text>
         </StyledCardNav>
       </Flex>
     </MainPage>
   );
-}
+};

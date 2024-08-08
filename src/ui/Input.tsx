@@ -29,8 +29,8 @@ export const Input = styled.input<InputProps>`
       placeholderTextColor && `color: ${placeholderTextColor}`};
   }
 
-  ${({ withBorder }) =>
-    withBorder &&
+  ${({ withborder }) =>
+    withborder &&
     `&:focus {
 border: 1px solid #abcdef;
 }
@@ -52,7 +52,7 @@ export interface InputProps {
   border?: string;
   color?: string;
   defaultValue?: string;
-  withBorder?: boolean;
+  withborder?: boolean;
   error?: boolean;
   bbottom?: string;
   bleft?: string;

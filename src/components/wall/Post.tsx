@@ -5,11 +5,12 @@ import { Flex } from "../../ui/Flex";
 import { useDispatch } from "react-redux";
 import { postDelete } from "../../store/slices/PostSlice";
 import deletion from "../img/img/deletion.png";
+import { TPost } from "../../types/user";
 
-function Post({ id, name }: any) {
+export const Post = ({ id, name }: TPost) => {
   const dispatch = useDispatch();
 
-  const handleDelete = (e: any) => {
+  const handleDelete = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     dispatch(postDelete({ id }));
   };
@@ -30,6 +31,6 @@ function Post({ id, name }: any) {
       </Flex>
     </Area>
   );
-}
+};
 
 export default Post;

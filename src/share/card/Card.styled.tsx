@@ -13,7 +13,7 @@ export const StyledTextWrapper = styled.div<TStyledTextWrapperProps>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 5px;
+  gap: 10px;
   width: 100%;
   height: 92px;
   position: relative;

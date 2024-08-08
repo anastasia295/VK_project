@@ -8,6 +8,9 @@ import Store from "./store/store/Store";
 
 const Global = createGlobalStyle`
 * {
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  font-style: normal;
   margin: 0;
   padding: 0;
   box-sizing: border-box;

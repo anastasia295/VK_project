@@ -18,16 +18,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { postCreate } from "../../store/slices/PostSlice";
 import Post from "./Post";
 import defAvatar from "../../components/img/img/defAvatar.png";
-import { TUser } from "../../types/user";
+import { TPost, TUser } from "../../types/user";
+import User from "./User";
 
-function Posts(props: any) {
+export const Posts = () => {
   const { avatar } = useSelector(
     (state: RootState) => state.auth.user
   ) as TUser;
   const posts = useSelector((state: RootState) => state.post.value);
   const dispatch = useDispatch();
 
-  const ref = useRef<any>(null);
+  const ref = useRef<HTMLTextAreaElement | null>(null);
 
   const [isTextareaVisible, setIsTextareaVisible] = useState(true);
   const [textPost, setTextPost] = useState("");
@@ -36,7 +37,7 @@ function Posts(props: any) {
     setIsTextareaVisible((prev) => !prev);
   };
 
-  const handleTextarea = (e: any) => {
+  const handleTextarea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.preventDefault();
     setTextPost(e.target.value);
     if (ref.current) {
@@ -45,7 +46,7 @@ function Posts(props: any) {
     }
   };
 
-  const handleonclick = (e: any) => {
+  const handleonclick = () => {
     if (textPost.length !== 0) {
       const newTodo = {
         id: Math.floor(Math.random() * 888888) + 100000,
@@ -121,14 +122,15 @@ function Posts(props: any) {
           <Img width="16px" height="16px" src={lens}></Img>
         </Flex>
       </StyledPageWall>
+      <User></User>
       <StyledPageRecords>
         {!!posts.length &&
-          posts.map((post: any) => {
+          posts.map((post: TPost) => {
             return <Post key={post.id} id={post.id} name={post.name}></Post>;
           })}
       </StyledPageRecords>
     </StyledPagePosts>
   );
-}
+};
 
 export default Posts;

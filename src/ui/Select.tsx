@@ -10,8 +10,8 @@ export const Select = styled.select<SelectProps>`
   ${({ border }) => border && `border: ${border}`};
   ${({ width }) => width && `width: ${width}`};
 
-  ${({ withBorder }) =>
-    withBorder &&
+  ${({ withborder }) =>
+    withborder &&
     `&:focus {
 border: 1px solid #abcdef;
 }
@@ -20,7 +20,7 @@ border: 1px solid #abcdef;
 
 export interface SelectProps {
   placeholder?: string;
-  withBorder?: boolean;
+  withborder?: boolean;
   width?: string;
   height?: string;
   padding?: string;
@@ -30,6 +30,5 @@ export interface SelectProps {
   color?: string;
   defaultValue?: string;
   maxlength?: string;
-
   type?: string;
 }

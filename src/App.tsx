@@ -1,7 +1,6 @@
 import { BrowserRouter, Route } from "react-router-dom";
 import { Routes } from "react-router-dom";
 import { Messages } from "./components/messages/Messages";
-import { MyPage } from "./components/myPage/MyPage";
 import { Friends } from "./components/friends/Friends";
 import { Communities } from "./components/communities/Communities";
 import { Photos } from "./components/photos/Photos";
@@ -12,8 +11,9 @@ import PrivateRoute from "./utils/router/PrivateRoute";
 import { SignIn } from "./components/auth/signIn/SignIn";
 import { SignUp } from "./components/auth/signUp/SignUp";
 import { Search } from "./components/search/Search";
-import { PageFriend } from "./components/myPage/PageFriend";
+import { MyPage } from "./components/myPage/MyPage";
 import { FriendRequests } from "./components/friendRequests/FriendRequests";
+import { UserFriends } from "./components/friends/UserFriends";
 
 function App() {
   return (
@@ -22,10 +22,9 @@ function App() {
         <Routes>
           <Route path="entrance" element={<SignIn />} />
           <Route path="registration" element={<SignUp />} />
-
           <Route element={<PrivateRoute />}>
-            <Route path="/" element={<MyPage />} />
-            <Route path="mypage" element={<MyPage />} />
+            <Route path="/" element={<Friends />} />
+            <Route path="/:id" element={<MyPage />} />
             <Route path="friends" element={<Friends />} />
             <Route path="communities" element={<Communities />} />
             <Route path="photos" element={<Photos />} />
@@ -35,7 +34,8 @@ function App() {
             <Route path="messages" element={<Messages />} />
             <Route path="search" element={<Search />} />
             <Route path="friendRequests" element={<FriendRequests />} />
-            <Route path="/user/:id" element={<PageFriend />} />
+
+            <Route path="/:id/friends" element={<UserFriends />} />
           </Route>
         </Routes>
       </BrowserRouter>

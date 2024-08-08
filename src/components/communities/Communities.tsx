@@ -7,11 +7,10 @@ import fre from "../../components/img/img/fre.png";
 import {
   StyledCardСontainer,
   StyledCardNav,
-  StyledNav,
-  StyledCardFavorites,
 } from "../communities/Communities.styled";
 import { Img } from "../img/Img";
 import { MainPage } from "../mainPage/MainPage";
+import { NavbarLink } from "../../ui/NavbarLink";
 
 const data = [
   { name: "Название сообщества", category: "Животные" },
@@ -20,7 +19,7 @@ const data = [
   { name: "Название сообщества", category: "Животные" },
 ];
 
-export function Communities(props: any) {
+export const Communities = () => {
   return (
     <MainPage>
       <Flex display="flex" gap="15px">
@@ -73,16 +72,31 @@ export function Communities(props: any) {
             </Area>
           ))}
         </StyledCardСontainer>
-
         <StyledCardNav>
-          <StyledNav>
+          <NavbarLink
+            display="flex"
+            width="100%"
+            height="30px"
+            br="5px"
+            padding="8px"
+            background=" #3a3a3a"
+            to={"#"}
+          >
             <Text fs="13px">Мои сообщества</Text>
-          </StyledNav>
-          <StyledCardFavorites>
+          </NavbarLink>
+          <NavbarLink
+            display="flex"
+            width="100%"
+            height="30px"
+            br="5px"
+            padding="8px"
+            hidebackground={true}
+            to={"#"}
+          >
             <Text fs="13px">Избранные сообщества</Text>
-          </StyledCardFavorites>
+          </NavbarLink>
         </StyledCardNav>
       </Flex>
     </MainPage>
   );
-}
+};

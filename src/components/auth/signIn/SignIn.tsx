@@ -16,29 +16,39 @@ import {
   StyledContainer,
   StyledPageblockVK,
 } from "./SIgnIn.styled";
+import { AxiosError } from "axios";
 
-export const SignIn: React.FC = (): JSX.Element => {
+export const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [hasError, setHasError] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const userData = {
         email,
         password,
       };
-
       const { data } = await axios.post("user/signIn", userData);
       dispatch(updateUser(data.data));
-      navigate("/mypage");
-    } catch (e: any) {
-      return e.message;
+      navigate(`/${data.data.id}`);
+    } catch (error) {
+      throw new Error((error as AxiosError).message);
     }
   };
 
+  function handleEmailChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setEmail(event.target.value);
+    setHasError(event.target.value.trim().length === 0);
+  }
+
+  function handlePasswordChange(event: React.ChangeEvent<HTMLInputElement>) {
+    setPassword(event.target.value);
+    setHasError(event.target.value.trim().length === 0);
+  }
   return (
     <StyledAppWrapper onSubmit={handleSubmit}>
       <StyledContainer>
@@ -58,10 +68,8 @@ export const SignIn: React.FC = (): JSX.Element => {
                 Вход Вконтакте
               </Text>
             </Area>
-
             <Input
-              withBorder
-              border="1px solid #545454"
+              border={hasError ? "1px solid red" : "1px solid #545454"}
               br="8px"
               padding="15px"
               width="304px"
@@ -71,12 +79,11 @@ export const SignIn: React.FC = (): JSX.Element => {
               placeholder="Введите логин"
               type="text"
               required
-              onChange={(e: any) => setEmail(e.target.value)}
+              onChange={handleEmailChange}
             ></Input>
             <Input
               type="password"
-              withBorder
-              border="1px solid #545454"
+              border={hasError ? "1px solid red" : "1px solid #545454"}
               br="8px"
               padding="15px"
               width="304px"
@@ -85,10 +92,10 @@ export const SignIn: React.FC = (): JSX.Element => {
               bc="#3f3f3f"
               required
               color="#e9e9e9"
-              onChange={(e: any) => setPassword(e.target.value)}
+              onChange={handlePasswordChange}
             ></Input>
-
             <Button
+              disabled={hasError}
               type="submit"
               fs="14px"
               br="8px"
@@ -98,7 +105,6 @@ export const SignIn: React.FC = (): JSX.Element => {
             >
               Войти
             </Button>
-
             <Area mt="110px">
               <Button
                 fs="14px"

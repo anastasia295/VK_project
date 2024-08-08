@@ -5,36 +5,10 @@ export const StyledCardNav = styled.div`
   border-radius: 10px;
   height: 168px;
   background: #222222;
-  padding: 10px 10px 20px 10px;
+  padding: 20px 15px;
   border: 1px solid #373737;
 `;
-export const StyledCardFavorites = styled.div`
-  cursor: pointer;
-  padding: 10px 15px;
-  display: flex;
-  align-items: center;
-  background: #222222;
-  width: 325px;
-  height: 40px;
-  border-radius: 10px;
-  &:hover {
-    background: #3a3a3a;
-  }
-`;
 
-export const StyledNav = styled.div`
-  cursor: pointer;
-  padding: 10px 15px;
-  display: flex;
-  align-items: center;
-  background: #222222;
-  width: 325px;
-  height: 40px;
-  border-radius: 10px;
-  &:hover {
-    background: #3a3a3a;
-  }
-`;
 export const StyledCardСontainer = styled.div`
   padding: 20px 20px;
   width: 550px;
