@@ -15,6 +15,7 @@ export const Textarea = styled.textarea<TextareaProps>`
   ${({ height }) => height && `height: ${height}`};
   ${({ color }) => color && `color: ${color}`};
   ${({ padding }) => padding && `padding: ${padding}`};
+  ${({ mt }) => mt && `margin-top: ${mt}`};
   ${({ bc }) => bc && `background-color: ${bc}`};
   ${({ border }) => border && `border: ${border}`};
   ${({ width }) => width && `width: ${width}`};
@@ -30,7 +31,6 @@ export interface TextareaProps {
   border?: string;
   color?: string;
   defaultValue?: string;
-  maxlength?: string;
-
+  mt?: string;
   type?: string;
 }

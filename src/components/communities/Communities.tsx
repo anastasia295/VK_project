@@ -59,9 +59,9 @@ export const Communities = () => {
               </Area>
             </Flex>
           </Area>
-          {data.map(({ name, category }) => (
-            <Area mt="15px">
-              <Card hideBorder={false} name={name}>
+          {data.map(({ name, category }, index) => (
+            <Area key={index} mt="15px">
+              <Card name={name}>
                 <Text color="#a0a0a0" fs="12px">
                   {category}
                 </Text>
@@ -90,7 +90,7 @@ export const Communities = () => {
             height="30px"
             br="5px"
             padding="8px"
-            hidebackground={true}
+            hidebackground
             to={"#"}
           >
             <Text fs="13px">Избранные сообщества</Text>

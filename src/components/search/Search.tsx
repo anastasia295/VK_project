@@ -6,37 +6,45 @@ import { Img } from "../img/Img";
 import fre from "../../components/img/img/fre.png";
 import defAvatar from "../../components/img/img/defAvatar.png";
 import { MainPage } from "../mainPage/MainPage";
-import { StyledCardNav, StyledCardСontainer } from "./Search.styled";
+import {
+  StyledCardNav,
+  StyledCardСontainer,
+  StyledLoader,
+} from "./Search.styled";
 import axios from "../../utils/axios/axios";
 import { useEffect, useState } from "react";
-import debounce from "lodash/debounce";
 import { NavbarLink } from "../../ui/NavbarLink";
 import { Button } from "../../ui/Button";
+import { TUser } from "../../types/user";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store/Store";
+import { socket } from "../../api/socket";
 import { AxiosError } from "axios";
-import { TFriendStatusAll, TUser } from "../../types/user";
+import React from "react";
 
 export const Search = () => {
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState(
+    useSelector((state: RootState) => state.search.value)
+  );
   const [user, setUser] = useState<TUser[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    async function fethUser() {
+    const geUsers = setTimeout(async () => {
       if (searchValue) {
         try {
           const { data } = await axios.get(`user/search?key=${searchValue}`);
           setUser(data.data);
-        } catch (error) {
-          throw new Error((error as AxiosError).message);
+          setIsLoading(false);
+        } catch (err: unknown) {
+          const error = err as AxiosError;
+          console.error(error.message);
         }
       }
-    }
+    }, 2000);
 
-    fethUser();
+    return () => clearTimeout(geUsers);
   }, [searchValue]);
-
-  const handleSearch = (value: string) => {
-    setSearchValue(value);
-  };
 
   const handleAdd = async (id: number, friendStatus: string) => {
     if (id) {
@@ -44,7 +52,8 @@ export const Search = () => {
         await axios.post("friend/", {
           whom: id,
         });
-        const newFriendStatus = user.map((el: any) => {
+        socket.emit("friend:add", id);
+        const newFriendStatus = user.map((el: TUser) => {
           if (el.id === id && friendStatus === "none") {
             return { ...el, friendStatus: "request" };
           } else if (el.id === id && friendStatus === "offer") {
@@ -53,9 +62,10 @@ export const Search = () => {
             return el;
           }
         });
-        setUser(newFriendStatus);
-      } catch (error) {
-        throw new Error((error as AxiosError).message);
+        setUser(newFriendStatus as TUser[]);
+      } catch (err: unknown) {
+        const error = err as AxiosError;
+        console.error(error.message);
       }
     }
   };
@@ -64,22 +74,24 @@ export const Search = () => {
     if (id) {
       try {
         await axios.delete(`friend/${id}`);
-        const newFriendStatus = user.map((el: any) => {
-          if (el.id === id && friendStatus === "request") {
-            return { ...el, friendStatus: "none" };
-          } else if (el.id === id && friendStatus === "offer") {
-            return { ...el, friendStatus: "none" };
-          } else if (el.id === id && friendStatus === "friend") {
-            return { ...el, friendStatus: "none" };
-          } else {
-            return el;
-          }
+        socket.emit("friend:delete", id);
+        const newFriendStatus = user.map((el: TUser) => {
+          return { ...el, friendStatus: "none" };
         });
-        console.log(newFriendStatus, "friendstatus");
-        setUser(newFriendStatus);
-      } catch (error) {
-        throw new Error((error as AxiosError).message);
+        setUser(newFriendStatus as TUser[]);
+      } catch (err: unknown) {
+        const error = err as AxiosError;
+        console.error(error.message);
       }
+    }
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsLoading(true);
+    setSearchValue(event.target.value);
+    if (event.target.value.length === 0) {
+      setIsLoading(false);
+      setUser([]);
     }
   };
 
@@ -93,12 +105,8 @@ export const Search = () => {
           <Area mt="20px">
             <Flex display="flex">
               <Input
-                type="search"
-                onChange={debounce(
-                  (e: React.ChangeEvent<HTMLInputElement>) =>
-                    handleSearch(e.target.value),
-                  2000
-                )}
+                value={searchValue}
+                onChange={handleChange}
                 bleft="1px solid #373737"
                 bbottom="1px solid #373737"
                 btop="1px solid #373737"
@@ -125,45 +133,88 @@ export const Search = () => {
           </Area>
           <Area mt="20px">
             <Text fs="14px">Люди</Text>
-            {user?.map((el: TUser) => (
-              <Area mt="15px">
-                <Flex
-                  display="flex"
-                  alignitems="center"
-                  justifycontent="space-between"
-                >
-                  <NavbarLink key={el.id} to={"/" + el.id}>
-                    <Flex display="flex" alignitems="center" gap="10px">
-                      <Img
-                        br="50%"
-                        width="80px"
-                        height="80px"
-                        src={el.avatar ? el.avatar : defAvatar}
-                      ></Img>
-                      <Flex display="flex" flexdirection="column" gap="10px">
-                        <Text cursor="pointer" fs="14px">
-                          {el.lastName} {el.firstName}
-                        </Text>
-                        <Text>{el.status}</Text>
-                        <NavbarLink to="#" color="#64a1ff" fs="13px">
-                          Написать сообщение
-                        </NavbarLink>
+
+            {isLoading ? (
+              <StyledLoader></StyledLoader>
+            ) : (
+              user?.map((el: TUser, index) => (
+                <Area key={index} mt="15px">
+                  <Flex
+                    display="flex"
+                    alignitems="center"
+                    justifycontent="space-between"
+                  >
+                    <NavbarLink key={el.id} to={"/" + el.id}>
+                      <Flex display="flex" alignitems="center" gap="10px">
+                        <Img
+                          br="50%"
+                          width="80px"
+                          height="80px"
+                          src={el.avatar ? el.avatar : defAvatar}
+                        ></Img>
+                        <Flex display="flex" flexdirection="column" gap="10px">
+                          <Text cursor="pointer" fs="14px">
+                            {el.lastName} {el.firstName}
+                          </Text>
+                          <Text>{el.status}</Text>
+                          <NavbarLink to="#" color="#64a1ff" fs="13px">
+                            Написать сообщение
+                          </NavbarLink>
+                        </Flex>
                       </Flex>
-                    </Flex>
-                  </NavbarLink>
-                  {el.friendStatus === "offer" ? (
-                    <Flex display="flex" gap="5px">
+                    </NavbarLink>
+                    {el.friendStatus === "offer" ? (
+                      <Flex display="flex" gap="5px">
+                        <Button
+                          onClick={() => handleAdd(el.id, el.friendStatus)}
+                          fs="15px"
+                          br="8px"
+                          color="black"
+                          bc="#c8c8c8"
+                          height="32px"
+                          width="130px"
+                        >
+                          Принять заявку
+                        </Button>
+                        <Button
+                          onClick={() => handleDelete(el.id, el.friendStatus)}
+                          fs="15px"
+                          br="8px"
+                          color="#bcbcbc"
+                          bc="#3a3a3a"
+                          height="32px"
+                          width="130px"
+                        >
+                          Отклонить
+                        </Button>
+                      </Flex>
+                    ) : el.friendStatus === "none" ? (
                       <Button
                         onClick={() => handleAdd(el.id, el.friendStatus)}
                         fs="15px"
                         br="8px"
-                        color="black"
-                        bc="#c8c8c8"
+                        color="#bcbcbc"
+                        bc="#3a3a3a"
                         height="32px"
-                        width="130px"
+                        width="150px"
                       >
-                        Принять заявку
+                        Добавить в друзья
                       </Button>
+                    ) : el.friendStatus === "friend" ? (
+                      <Button
+                        onClick={() => handleDelete(el.id, el.friendStatus)}
+                        fs="15px"
+                        br="8px"
+                        color="#bcbcbc"
+                        bc="#3a3a3a"
+                        width="150px"
+                        height="32px"
+                      >
+                        Удалить из друзей
+                      </Button>
+                    ) : el.friendStatus === "me" ? (
+                      <div></div>
+                    ) : (
                       <Button
                         onClick={() => handleDelete(el.id, el.friendStatus)}
                         fs="15px"
@@ -171,76 +222,26 @@ export const Search = () => {
                         color="#bcbcbc"
                         bc="#3a3a3a"
                         height="32px"
-                        width="130px"
+                        width="200px"
                       >
-                        Отклонить
+                        Отменить заявку
                       </Button>
-                    </Flex>
-                  ) : el.friendStatus === "none" ? (
-                    <Button
-                      onClick={() => handleAdd(el.id, el.friendStatus)}
-                      fs="15px"
-                      br="8px"
-                      color="#bcbcbc"
-                      bc="#3a3a3a"
-                      height="32px"
-                      width="150px"
-                    >
-                      Добавить в друзья
-                    </Button>
-                  ) : el.friendStatus === "friend" ? (
-                    <Button
-                      onClick={() => handleDelete(el.id, el.friendStatus)}
-                      fs="15px"
-                      br="8px"
-                      color="#bcbcbc"
-                      bc="#3a3a3a"
-                      width="150px"
-                      height="32px"
-                    >
-                      Удалить из друзей
-                    </Button>
-                  ) : el.friendStatus === "me" ? (
-                    <div></div>
-                  ) : (
-                    <Button
-                      onClick={() => handleDelete(el.id, el.friendStatus)}
-                      fs="15px"
-                      br="8px"
-                      color="#bcbcbc"
-                      bc="#3a3a3a"
-                      height="32px"
-                      width="200px"
-                    >
-                      Отменить заявку
-                    </Button>
-                  )}
-                </Flex>
-              </Area>
-            ))}
+                    )}
+                  </Flex>
+                </Area>
+              ))
+            )}
           </Area>
         </StyledCardСontainer>
         <StyledCardNav>
           <NavbarLink
+            background=" #3a3a3a"
             to={"#"}
             display="flex"
-            width="160px"
+            width="100%"
             height="30px"
             br="5px"
             padding="8px"
-            hidebackground={true}
-          >
-            <Text fs="13px">Все</Text>
-          </NavbarLink>
-
-          <NavbarLink
-            to={"#"}
-            display="flex"
-            width="160px"
-            height="30px"
-            br="5px"
-            padding="8px"
-            hidebackground={true}
           >
             <Text fs="13px">Люди</Text>
           </NavbarLink>

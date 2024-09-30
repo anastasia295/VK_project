@@ -13,7 +13,7 @@ export const StyledTextWrapper = styled.div<TStyledTextWrapperProps>`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 10px;
+  gap: 15px;
   width: 100%;
   height: 92px;
   position: relative;
@@ -25,8 +25,8 @@ export const StyledTextWrapper = styled.div<TStyledTextWrapperProps>`
     width: 100%;
     bottom: -1px;
   }
-  ${({ hideBorder }) =>
-    hideBorder &&
+  ${({ hideborder }) =>
+    hideborder &&
     `  &:hover {
     &:after {
       border-bottom: none;

@@ -17,14 +17,30 @@ import {
   StyledPageWall,
 } from "./MyPage.styled";
 import lens from "../img/img/lens.png";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "../../utils/axios/axios";
 import { useParams } from "react-router-dom";
 import { NavbarLink } from "../../ui/NavbarLink";
 import Posts from "../wall/Wall";
-import React from "react";
 import { TFriendStatus, TFriendStatusAll, TUser } from "../../types/user";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store/Store";
+import { updatePage } from "../../store/slices/PageSlice";
+import { socket } from "../../api/socket";
+import { getLastOnline } from "../../utils/getLastOnline";
+import { BlankPage } from "./BlankPage";
+import { DialogBox } from "./DialogBox";
 import { AxiosError } from "axios";
+import {
+  addFriend,
+  addFriendsFriend,
+  addRequest,
+  deleteFriend,
+  deleteFriendsFriend,
+  deleteOffer,
+  deleteRequest,
+  updateFriendsFriend,
+} from "../../store/slices/FriendsSlice";
 
 const BUTTON_TEXT_MAP: Record<TFriendStatus, string | null> = {
   request: "Отменить заявку",
@@ -37,52 +53,68 @@ const isAddFriend = (status: TFriendStatus): boolean =>
   ["offer", "none"].includes(status);
 
 export const MyPage = () => {
-  const [page, setPage] = useState<TUser | null>(null);
-  const [friendStatus, setFriendStatus] = useState<
-    TFriendStatusAll | undefined
-  >(page?.friendStatus);
-
+  const userPage = useSelector((state: RootState) => state.page.page) as TUser;
+  const user = useSelector((state: RootState) => state.auth.user) as TUser;
+  const friendsMe = useSelector((state: RootState) => state.friend.friend);
+  const friendsFriend = useSelector(
+    (state: RootState) => state.friend.friendsFriend
+  );
+  const [modal, setModal] = useState(false);
   const { id } = useParams();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function fethUser() {
       if (id) {
         try {
           const { data } = await axios.get(`user/${id}`);
-          setPage(data.data);
-          setFriendStatus(data.data.friendStatus);
-        } catch (error) {
-          throw new Error((error as AxiosError).message);
+          dispatch(updatePage(data.data));
+          dispatch(updateFriendsFriend(data.data.friends));
+        } catch (err: unknown) {
+          const error = err as AxiosError;
+          console.error(error.message);
         }
       }
     }
     fethUser();
-  }, [id]);
+  }, [id, dispatch]);
 
   const handleAdd = async () => {
-    if (page) {
+    if (userPage) {
       try {
         await axios.post("friend/", {
           whom: id,
         });
-        if (friendStatus === "none") {
-          setFriendStatus("request");
-        } else if (friendStatus === "offer") {
-          setFriendStatus("friend");
+        socket.emit("friend:add", userPage.id);
+        dispatch(addRequest(userPage));
+        dispatch(deleteOffer({ id: userPage.id }));
+        if (userPage.friendStatus === "none") {
+          dispatch(updatePage({ ...userPage, friendStatus: "request" }));
+        } else if (userPage.friendStatus === "offer") {
+          dispatch(addFriend(userPage));
+          dispatch(addFriendsFriend(user));
+          dispatch(updatePage({ ...userPage, friendStatus: "friend" }));
         }
-      } catch (error) {
-        throw new Error((error as AxiosError).message);
+      } catch (err: unknown) {
+        const error = err as AxiosError;
+        console.error(error.message);
       }
     }
   };
 
   const handleDelete = async () => {
-    if (page) {
+    if (userPage) {
       try {
         await axios.delete(`friend/${id}`);
-        setFriendStatus("none");
-      } catch (error) {
-        throw new Error((error as AxiosError).message);
+        socket.emit("friend:delete", userPage.id);
+        dispatch(deleteRequest({ id: userPage.id }));
+        dispatch(deleteOffer({ id: userPage.id }));
+        dispatch(deleteFriend({ id: userPage.id }));
+        dispatch(updatePage({ ...userPage, friendStatus: "none" }));
+        dispatch(deleteFriendsFriend({ id: user.id }));
+      } catch (err: unknown) {
+        const error = err as AxiosError;
+        console.error(error.message);
       }
     }
   };
@@ -97,7 +129,7 @@ export const MyPage = () => {
               color="#dedede"
               br="8px"
               fs="16px"
-              width="198px"
+              width="220px"
               height="32px"
             >
               Редактировать профиль
@@ -109,6 +141,9 @@ export const MyPage = () => {
     return (
       <Flex display="flex" gap="5px">
         <Button
+          onClick={() => {
+            setModal(true);
+          }}
           fs="15px"
           br="8px"
           color="black"
@@ -146,9 +181,11 @@ export const MyPage = () => {
     );
   };
 
-  if (!page) {
-    return null;
+  if (!userPage) {
+    return <BlankPage></BlankPage>;
   }
+
+  const isMe = userPage.friendStatus === "me";
 
   return (
     <MainPage>
@@ -159,21 +196,33 @@ export const MyPage = () => {
               br="50%"
               width="150px"
               height="150px"
-              src={page.avatar ? page.avatar : defAvatar}
+              src={userPage.avatar ? userPage.avatar : defAvatar}
             ></Img>
             <Flex>
               <Text fs="35px" color="#dedede">
-                {page.firstName} {page.lastName}
+                {userPage.firstName} {userPage.lastName}
               </Text>
               <Text color="#dedede" fs="13px">
-                {page.status}
+                {userPage.status}
               </Text>
+              {userPage.isOnline === true || isMe ? (
+                <Text color="#dedede" fs="13px">
+                  Онлайн
+                </Text>
+              ) : userPage.isOnline === null ? (
+                <></>
+              ) : (
+                <Text color="#dedede" fs="13px">
+                  {getLastOnline(userPage.lastOnline, userPage.gender)}
+                </Text>
+              )}
             </Flex>
           </Flex>
           <Flex display="flex" gap="5px">
-            {friendStatus && renderButtons(friendStatus)}
+            {userPage.friendStatus && renderButtons(userPage.friendStatus)}
           </Flex>
         </StyledPageAvatar>
+
         <Flex display="flex" justifycontent="space-between">
           <StyledPagePhotoPosts>
             <StyledPagePhoto>
@@ -198,7 +247,7 @@ export const MyPage = () => {
                   <Img width="167px" height="167px" src={avatar5}></Img>
                 </Flex>
               </Area>
-              {friendStatus === "me" && (
+              {isMe && (
                 <Area mt="60px">
                   <Flex display="flex" justifycontent="space-between">
                     <Button
@@ -223,10 +272,10 @@ export const MyPage = () => {
                 </Area>
               )}
             </StyledPagePhoto>
-            {friendStatus === "me" ? (
+            {isMe ? (
               <Posts></Posts>
             ) : (
-              <React.Fragment>
+              <>
                 <StyledPageWall>
                   <Flex
                     display="flex"
@@ -238,45 +287,83 @@ export const MyPage = () => {
                   </Flex>
                 </StyledPageWall>
                 <StyledPageRecords></StyledPageRecords>
-              </React.Fragment>
+              </>
             )}
+            <DialogBox
+              userMessage={userPage}
+              setModal={setModal}
+              open={modal}
+            ></DialogBox>
           </StyledPagePhotoPosts>
+
           <StyledPageFriends>
-            {friendStatus === "me" ? (
-              <NavbarLink to={"/friends"}>
-                <Text fs="15px">Друзья</Text>
-              </NavbarLink>
+            {isMe ? (
+              <>
+                <NavbarLink to={"/friends"}>
+                  <Text fs="15px">Друзья</Text>
+                </NavbarLink>
+                <Area mt="15px">
+                  <Flex display="flex" gap="10px">
+                    {friendsMe?.map((el: TUser, index) => {
+                      return (
+                        <Flex
+                          key={index}
+                          display="flex"
+                          flexdirection="column"
+                          alignitems="center"
+                          gap="5px"
+                        >
+                          <Img
+                            br="50%"
+                            width="64px"
+                            height="64px"
+                            src={el.avatar ? el.avatar : defAvatar}
+                          ></Img>
+                          <NavbarLink key={el.id} to={"/" + el.id}>
+                            <Text fs="15px" color="#dedede">
+                              {el.lastName}
+                            </Text>
+                          </NavbarLink>
+                        </Flex>
+                      );
+                    })}
+                  </Flex>
+                </Area>
+              </>
             ) : (
-              <NavbarLink to={"/" + id + "/friends"}>
-                <Text fs="15px">Друзья</Text>
-              </NavbarLink>
+              <>
+                <NavbarLink to={"/" + id + "/friends"}>
+                  <Text fs="15px">Друзья</Text>
+                </NavbarLink>
+                <Area mt="15px">
+                  <Flex display="flex" gap="10px">
+                    {friendsFriend?.map((el: TUser, index) => {
+                      return (
+                        <Flex
+                          key={index}
+                          display="flex"
+                          flexdirection="column"
+                          alignitems="center"
+                          gap="5px"
+                        >
+                          <Img
+                            br="50%"
+                            width="64px"
+                            height="64px"
+                            src={el.avatar ? el.avatar : defAvatar}
+                          ></Img>
+                          <NavbarLink key={el.id} to={"/" + el.id}>
+                            <Text fs="15px" color="#dedede">
+                              {el.lastName}
+                            </Text>
+                          </NavbarLink>
+                        </Flex>
+                      );
+                    })}
+                  </Flex>
+                </Area>
+              </>
             )}
-            <Area mt="15px">
-              <Flex display="flex" gap="10px">
-                {page.friends?.map((el: TUser) => {
-                  return (
-                    <NavbarLink key={el.id} to={"/" + el.id}>
-                      <Flex
-                        display="flex"
-                        flexdirection="column"
-                        alignitems="center"
-                        gap="5px"
-                      >
-                        <Img
-                          br="50%"
-                          width="64px"
-                          height="64px"
-                          src={el.avatar ? el.avatar : defAvatar}
-                        ></Img>
-                        <Text fs="15px" color="#dedede">
-                          {el.lastName}
-                        </Text>
-                      </Flex>
-                    </NavbarLink>
-                  );
-                })}
-              </Flex>
-            </Area>
           </StyledPageFriends>
         </Flex>
       </Flex>

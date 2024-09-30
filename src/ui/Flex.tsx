@@ -15,8 +15,13 @@ export const Flex = styled.div<FlexProps>`
 
 export interface FlexProps {
   flexdirection?: "column" | "row" | "column-reverse" | "row-reverse";
-  justifycontent?: "center" | "space-between" | "space-around" | "space-evenly";
-  alignitems?: "center" | "stretch" | "end";
+  justifycontent?:
+    | "center"
+    | "space-between"
+    | "space-around"
+    | "space-evenly"
+    | "right";
+  alignitems?: "center" | "stretch" | "flex-end" | "flex-start";
   display?: "flex" | "block";
   flexwrap?: "nowrap" | "wrap-reverse" | "wrap";
   gap?: string;

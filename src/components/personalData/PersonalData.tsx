@@ -27,8 +27,9 @@ export const PersonalData = () => {
     try {
       const { data } = await axios.put("user", user);
       dispatch(updateUser(data.data));
-    } catch (error) {
-      throw new Error((error as AxiosError).message);
+    } catch (err: unknown) {
+      const error = err as AxiosError;
+      console.error(error.message);
     }
   };
 
@@ -62,7 +63,7 @@ export const PersonalData = () => {
                   Имя
                 </Text>
                 <Input
-                  withborder={true}
+                  withborder
                   border="1px solid #545454"
                   br="8px"
                   fs="16px"
@@ -81,7 +82,7 @@ export const PersonalData = () => {
                   Фамилия
                 </Text>
                 <Input
-                  withborder={true}
+                  withborder
                   border="1px solid #545454"
                   br="8px"
                   fs="16px"
@@ -101,7 +102,7 @@ export const PersonalData = () => {
                 </Text>
                 <Select
                   value={user.gender}
-                  withborder={true}
+                  withborder
                   border="1px solid #545454"
                   bc="#222222"
                   color="#bcbcbc"
@@ -124,7 +125,7 @@ export const PersonalData = () => {
                 </Text>
                 <Input
                   value={user.birthday}
-                  withborder={true}
+                  withborder
                   border="1px solid #545454"
                   br="8px"
                   fs="16px"
@@ -181,7 +182,7 @@ export const PersonalData = () => {
             height="40px"
             br="5px"
             padding="8px"
-            hidebackground={true}
+            hidebackground
             to="/editing"
           >
             <Text color="#dedede" fs="13px">

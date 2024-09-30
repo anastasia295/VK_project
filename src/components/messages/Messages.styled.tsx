@@ -10,7 +10,7 @@ export const StyledMessagesContent = styled.div`
 export const StyledMessagesСontainer = styled.div`
   width: 550px;
   border-radius: 10px;
-  height: 608px;
+  min-height: 608px;
   background: #222222;
   border-bottom: 1px solid #373737;
   border-left: 1px solid #373737;

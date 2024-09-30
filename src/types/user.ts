@@ -7,6 +7,7 @@ export type TFamilyStatus =
   | "notChosen";
 
 export type TUser = {
+  userPage: string;
   id: number;
   firstName: string;
   lastName: string;
@@ -21,6 +22,8 @@ export type TUser = {
   friendStatus: TFriendStatusAll;
   background: string;
   friends: TUser[];
+  lastOnline: string;
+  isOnline: boolean;
 };
 
 export type TUserResponse = {

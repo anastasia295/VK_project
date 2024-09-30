@@ -19,7 +19,6 @@ import { postCreate } from "../../store/slices/PostSlice";
 import Post from "./Post";
 import defAvatar from "../../components/img/img/defAvatar.png";
 import { TPost, TUser } from "../../types/user";
-import User from "./User";
 
 export const Posts = () => {
   const { avatar } = useSelector(
@@ -28,7 +27,7 @@ export const Posts = () => {
   const posts = useSelector((state: RootState) => state.post.value);
   const dispatch = useDispatch();
 
-  const ref = useRef<HTMLTextAreaElement | null>(null);
+  const ref = useRef<HTMLTextAreaElement | null>(null!);
 
   const [isTextareaVisible, setIsTextareaVisible] = useState(true);
   const [textPost, setTextPost] = useState("");
@@ -45,7 +44,6 @@ export const Posts = () => {
       ref.current.style.height = `${e.target.scrollHeight - 0}px`;
     }
   };
-
   const handleonclick = () => {
     if (textPost.length !== 0) {
       const newTodo = {
@@ -62,7 +60,7 @@ export const Posts = () => {
       {isTextareaVisible ? (
         <div>
           <Input
-            onClick={onClick}
+            onFocus={onClick}
             border="1px solid #373737"
             br="10px"
             padding="5px 55px"
@@ -122,7 +120,7 @@ export const Posts = () => {
           <Img width="16px" height="16px" src={lens}></Img>
         </Flex>
       </StyledPageWall>
-      <User></User>
+
       <StyledPageRecords>
         {!!posts.length &&
           posts.map((post: TPost) => {

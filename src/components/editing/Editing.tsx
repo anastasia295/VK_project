@@ -30,12 +30,12 @@ import defAvatar from "../../components/img/img/defAvatar.png";
 import { AxiosError } from "axios";
 
 export const Editing = () => {
-  const filePickerAvatar = useRef<any>(null);
-  const filePickerBackground = useRef<any>(null);
-  const [fileAvatar, setFileAvatar] = useState<any | undefined>();
-  const [fileBackground, setFileBackground] = useState<any | undefined>();
-  const dispatch = useDispatch();
   const userData = useSelector((state: RootState) => state.auth.user) as TUser;
+  const filePickerAvatar = useRef<HTMLInputElement>(null);
+  const filePickerBackground = useRef<HTMLInputElement>(null);
+  const [fileAvatar, setFileAvatar] = useState<File | null>(null);
+  const [fileBackground, setFileBackground] = useState<File | null>(null);
+  const dispatch = useDispatch();
   const [user, setUser] = useState<TUser>(userData);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -43,8 +43,9 @@ export const Editing = () => {
     try {
       const { data } = await axios.put("user", user);
       dispatch(updateUser(data.data));
-    } catch (error) {
-      throw new Error((error as AxiosError).message);
+    } catch (err: unknown) {
+      const error = err as AxiosError;
+      console.error(error.message);
     }
   };
 
@@ -59,8 +60,11 @@ export const Editing = () => {
         return { ...prev, [fieldName]: e.target.value };
       });
     };
+
   const handlePickAvatar = () => {
-    filePickerAvatar.current.click();
+    if (filePickerAvatar.current) {
+      filePickerAvatar.current.click();
+    }
   };
 
   function handleChangeAvatar(event: React.ChangeEvent) {
@@ -73,7 +77,7 @@ export const Editing = () => {
   }
 
   const handleUpLoadAvatar = async (event: React.MouseEvent<HTMLElement>) => {
-    if (fileAvatar !== undefined) {
+    if (fileAvatar) {
       event.preventDefault();
       const formData = new FormData();
       formData.append("avatar", fileAvatar);
@@ -90,7 +94,9 @@ export const Editing = () => {
   };
 
   const handlePickBackground = () => {
-    filePickerBackground.current.click();
+    if (filePickerBackground.current) {
+      filePickerBackground.current.click();
+    }
   };
   function handleChangeBackground(event: React.ChangeEvent) {
     const input = event.target as HTMLInputElement;
@@ -104,7 +110,7 @@ export const Editing = () => {
   const handleUpLoadBackground = async (
     event: React.MouseEvent<HTMLElement>
   ) => {
-    if (fileBackground !== undefined) {
+    if (fileBackground) {
       event.preventDefault();
       const formData = new FormData();
       formData.append("background", fileBackground);
@@ -115,7 +121,6 @@ export const Editing = () => {
         },
       };
       const { data } = await axios.put("user", formData, config);
-      console.log(data.data);
       dispatch(updateUser(data.data));
       setUser(data.data);
     }
@@ -146,7 +151,6 @@ export const Editing = () => {
                 >
                   Изменить обложку
                 </StyledChangedButton>
-
                 <StyledHoverBackground>
                   <StyledHoverBackgroundWrapper>
                     <Button
@@ -184,7 +188,6 @@ export const Editing = () => {
                     >
                       Удалить
                     </Button>
-
                     <Input
                       ref={filePickerBackground}
                       opacity="0"
@@ -317,7 +320,6 @@ export const Editing = () => {
                 width="300px"
                 height="30px"
                 br="5px"
-                withborder={false}
                 border="1px solid #545454"
                 onChange={onChange("city")}
               ></Input>
@@ -343,7 +345,7 @@ export const Editing = () => {
             height="40px"
             br="5px"
             padding="8px"
-            hidebackground={true}
+            hidebackground
             to="/personalData"
           >
             <Text color="#dedede" fs="14px">

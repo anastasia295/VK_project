@@ -12,13 +12,27 @@ import myPage from "../../components/img/img/main-page.svg";
 import { RootState } from "../../store/store/Store";
 import { TUser, TСhildren } from "../../types/user";
 import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 
 export const MainPage = ({ children }: TСhildren) => {
   const userData = useSelector((state: RootState) => state.auth.user) as TUser;
+  const [uniqueNotification, setUniqueNotification] = useState<number[]>([]);
+
+  const friendOffer = useSelector((state: RootState) => state.friend.offer);
+  const notification = useSelector(
+    (state: RootState) => state.messages.notification
+  );
+
+  useEffect(() => {
+    const uniqueNames = new Set(notification);
+    const res = Array.from(uniqueNames);
+    setUniqueNotification(res);
+  }, [notification]);
 
   return (
     <StyledPageWrapper>
       <Header></Header>
+
       <StyledPageContainer>
         <Flex display="flex" flexdirection="column" gap="5px">
           <NavbarLink
@@ -29,11 +43,11 @@ export const MainPage = ({ children }: TСhildren) => {
             height="30px"
             br="5px"
             padding="8px"
-            hidebackground={true}
+            hidebackground
             to={"/" + userData.id}
           >
             <Img width="20px" height="20px" src={myPage} />
-            <Text>Моя страница</Text>
+            <Text>Моя страница </Text>
           </NavbarLink>
           <NavbarLink
             display="flex"
@@ -43,11 +57,16 @@ export const MainPage = ({ children }: TСhildren) => {
             height="30px"
             br="5px"
             padding="8px"
-            hidebackground={true}
+            hidebackground
             to="/messages"
           >
             <Img width="20px" height="20px" src={messages}></Img>
             <Text>Мессенджер</Text>
+            {uniqueNotification.length > 0 && (
+              <Text color="#64a1ff" fs="15px">
+                {uniqueNotification.length}+
+              </Text>
+            )}
           </NavbarLink>
           <NavbarLink
             display="flex"
@@ -57,11 +76,17 @@ export const MainPage = ({ children }: TСhildren) => {
             height="30px"
             br="5px"
             padding="8px"
-            hidebackground={true}
+            hidebackground
             to="/friends"
           >
             <Img width="20px" height="20px" src={friends}></Img>
             <Text cursor="pointer">Друзья</Text>
+
+            {friendOffer.length > 0 && (
+              <Text color="#64a1ff" fs="15px">
+                {friendOffer.length}+
+              </Text>
+            )}
           </NavbarLink>
           <NavbarLink
             display="flex"
@@ -71,7 +96,7 @@ export const MainPage = ({ children }: TСhildren) => {
             height="30px"
             br="5px"
             padding="8px"
-            hidebackground={true}
+            hidebackground
             to="/communities"
           >
             <Img width="20px" height="20px" src={communities}></Img>
@@ -85,7 +110,7 @@ export const MainPage = ({ children }: TСhildren) => {
             height="30px"
             br="5px"
             padding="8px"
-            hidebackground={true}
+            hidebackground
             to="/photos"
           >
             <Img width="20px" height="18px" src={photosnav}></Img>

@@ -22,6 +22,7 @@ export const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [hasError, setHasError] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -35,8 +36,9 @@ export const SignIn = () => {
       const { data } = await axios.post("user/signIn", userData);
       dispatch(updateUser(data.data));
       navigate(`/${data.data.id}`);
-    } catch (error) {
-      throw new Error((error as AxiosError).message);
+    } catch (err: unknown) {
+      const error = err as AxiosError;
+      console.error(error.message);
     }
   };
 
@@ -49,6 +51,7 @@ export const SignIn = () => {
     setPassword(event.target.value);
     setHasError(event.target.value.trim().length === 0);
   }
+
   return (
     <StyledAppWrapper onSubmit={handleSubmit}>
       <StyledContainer>

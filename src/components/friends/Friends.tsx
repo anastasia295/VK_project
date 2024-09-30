@@ -11,34 +11,56 @@ import { NavbarLink } from "../../ui/NavbarLink";
 import { MainPage } from "../mainPage/MainPage";
 import axios from "../../utils/axios/axios";
 import { useEffect, useState } from "react";
-import { AxiosError } from "axios";
 import { TUser } from "../../types/user";
+import { deleteFriend } from "../../store/slices/FriendsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store/Store";
+import { DialogBox } from "../myPage/DialogBox";
+import { AxiosError } from "axios";
+import { socket } from "../../api/socket";
+
+const filterFriends = (searchText: string, listOfFriends: TUser[]) => {
+  if (!searchText) {
+    return listOfFriends;
+  }
+  return listOfFriends.filter((el: TUser) => {
+    const name = `${el.lastName} ${el.firstName} ${el.lastName}`;
+    return name.toLowerCase().includes(searchText.toLowerCase());
+  });
+};
 
 export const Friends = () => {
-  const [friends, setFriends] = useState([]);
+  const dispatch = useDispatch();
+  const friends = useSelector((state: RootState) => state.friend.friend);
+  const [modal, setModal] = useState(false);
+  const [userMessage, setUserMessage] = useState<TUser>({} as TUser);
+  const [searchFriends, setSearchFriends] = useState("");
+  const [friendsList, setFriendsList] = useState(friends);
 
   useEffect(() => {
-    async function fethFriend() {
-      try {
-        const { data } = await axios.get("friend");
-        setFriends(data.data);
-      } catch (error) {
-        throw new Error((error as AxiosError).message);
-      }
-    }
-    fethFriend();
-  }, []);
+    const debounce = setTimeout(() => {
+      const filteredFriends = filterFriends(searchFriends, friends);
+      setFriendsList(filteredFriends);
+    }, 1000);
+    return () => clearTimeout(debounce);
+  }, [searchFriends, friends]);
 
   const handleDelete = async (id: number) => {
     if (id) {
       try {
         await axios.delete(`friend/${id}`);
-        const filterFriends = friends.filter((el: TUser) => el.id !== id);
-        setFriends(filterFriends);
-      } catch (error) {
-        throw new Error((error as AxiosError).message);
+        socket.emit("friend:delete", id);
+        dispatch(deleteFriend({ id }));
+      } catch (err: unknown) {
+        const error = err as AxiosError;
+        console.error(error.message);
       }
     }
+  };
+
+  const writeMessage = async (el: TUser) => {
+    setModal(true);
+    setUserMessage(el);
   };
 
   return (
@@ -56,6 +78,10 @@ export const Friends = () => {
           <Area mt="20px">
             <Flex display="flex">
               <Input
+                value={searchFriends}
+                onChange={(event) => {
+                  setSearchFriends(event.target.value);
+                }}
                 bleft="1px solid #373737"
                 bbottom="1px solid #373737"
                 btop="1px solid #373737"
@@ -80,33 +106,40 @@ export const Friends = () => {
               </Area>
             </Flex>
           </Area>
-          {friends.map((el: TUser) => (
-            <NavbarLink key={el.id} to={"/" + el.id}>
-              <Area mt="15px">
-                <Card
-                  key={el.id}
-                  hideBorder={false}
-                  firstName={el.firstName}
-                  lastName={el.lastName}
-                  avatar={el.avatar ? el.avatar : defAvatar}
-                >
-                  <Flex display="flex" gap="20px">
-                    <NavbarLink to="#" color="#64a1ff" fs="13px">
-                      Написать сообщение
-                    </NavbarLink>
-                    <NavbarLink
-                      onClick={() => handleDelete(el.id)}
-                      to="#"
-                      color="#64a1ff"
-                      fs="13px"
-                    >
-                      Удалить из друзей
-                    </NavbarLink>
-                  </Flex>
-                </Card>
-              </Area>
-            </NavbarLink>
+
+          {friendsList.map((el: TUser, index) => (
+            <Area key={index} mt="15px">
+              <Card
+                id={el.id}
+                firstName={el.firstName}
+                lastName={el.lastName}
+                avatar={el.avatar ? el.avatar : defAvatar}
+              >
+                <Flex display="flex" gap="20px">
+                  <Text
+                    onClick={() => writeMessage(el)}
+                    color="#64a1ff"
+                    fs="13px"
+                  >
+                    Написать сообщение
+                  </Text>
+                  <Text
+                    onClick={() => handleDelete(el.id)}
+                    color="#64a1ff"
+                    fs="13px"
+                  >
+                    Удалить из друзей
+                  </Text>
+                </Flex>
+              </Card>
+            </Area>
           ))}
+
+          <DialogBox
+            userMessage={userMessage}
+            setModal={setModal}
+            open={modal}
+          ></DialogBox>
         </StyledCardСontainer>
         <StyledCardNav>
           <NavbarLink
@@ -128,7 +161,7 @@ export const Friends = () => {
             height="30px"
             br="5px"
             padding="8px"
-            hidebackground={true}
+            hidebackground
             to="/friendRequests"
           >
             <Text color="#dedede" fs="13px">

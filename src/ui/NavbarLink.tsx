@@ -16,15 +16,20 @@ export const NavbarLink = styled(Link)<NavbarLinkProps>`
   ${({ height }) => height && `height: ${height}`};
   ${({ display }) => display && `display: ${display}`};
   ${({ alignitems }) => alignitems && `align-items: ${alignitems}`};
+  ${({ alignitems }) => alignitems && `align-items: ${alignitems}`};
   ${({ flexdirection }) => flexdirection && `flex-direction: ${flexdirection}`};
   ${({ gap }) => gap && `gap: ${gap}`};
+  ${({ justifycontent }) =>
+    justifycontent && `justify-content: ${justifycontent}`};
 
   ${({ hidebackground }) =>
     hidebackground &&
-    `  &:hover {
+    `&:hover {
       background: #3a3a3a;
-    }
+    } 
 `};
+  ${({ isactive }) =>
+    isactive && `height: 30px; background: #3a3a3a; border-radius: 5px;`};
 `;
 
 export interface NavbarLinkProps {
@@ -40,4 +45,6 @@ export interface NavbarLinkProps {
   alignitems?: string;
   flexdirection?: string;
   gap?: string;
+  isactive?: boolean;
+  justifycontent?: string;
 }

@@ -15,6 +15,8 @@ const Global = createGlobalStyle`
   padding: 0;
   box-sizing: border-box;
   
+
+}
 }`;
 
 const root = ReactDOM.createRoot(

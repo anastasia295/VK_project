@@ -29,6 +29,5 @@ export interface SelectProps {
   border?: string;
   color?: string;
   defaultValue?: string;
-  maxlength?: string;
   type?: string;
 }

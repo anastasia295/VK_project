@@ -28,13 +28,12 @@ function App() {
             <Route path="friends" element={<Friends />} />
             <Route path="communities" element={<Communities />} />
             <Route path="photos" element={<Photos />} />
-            <Route path="Dialogue" element={<Dialogue />} />
+            <Route path="dialogue/:id" element={<Dialogue />} />
             <Route path="editing" element={<Editing />} />
             <Route path="personalData" element={<PersonalData />} />
             <Route path="messages" element={<Messages />} />
             <Route path="search" element={<Search />} />
             <Route path="friendRequests" element={<FriendRequests />} />
-
             <Route path="/:id/friends" element={<UserFriends />} />
           </Route>
         </Routes>

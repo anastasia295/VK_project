@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export interface PostSlice {
+type PostState = {
   value: any[];
-}
+};
 
-const initialState: PostSlice = {
+const initialState: PostState = {
   value: [],
 };
 

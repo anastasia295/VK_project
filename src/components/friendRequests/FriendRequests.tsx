@@ -5,173 +5,133 @@ import { StyledCardСontainer, StyledCardNav } from "../friends/Friends.styled";
 import { NavbarLink } from "../../ui/NavbarLink";
 import { MainPage } from "../mainPage/MainPage";
 import axios from "../../utils/axios/axios";
-import { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Area } from "../../ui/Area";
 import { Card } from "../../share/card/Card";
 import { Button } from "../../ui/Button";
-import { AxiosError } from "axios";
 import { TUser } from "../../types/user";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/store/Store";
+import {
+  addFriend,
+  deleteOffer,
+  deleteRequest,
+} from "../../store/slices/FriendsSlice";
+import { AxiosError } from "axios";
+import { socket } from "../../api/socket";
 
 export const FriendRequests = () => {
-  const [friendRequests, setFriendRequests] = useState([]);
-  const [friendOffers, setFriendOffers] = useState([]);
+  const [isOfferVisible, setIsOfferVisible] = useState(true);
   const [contentType, setContentType] = useState("incoming");
-
-  useEffect(() => {
-    async function fethFriend() {
-      const { data } = await axios.get("friend/offers");
-      setFriendOffers(data.data);
-      setFriendRequests([]);
-    }
-    fethFriend();
-  }, []);
-
-  const handleRequests = async (type: string) => {
-    try {
-      const { data } = await axios.get("friend/requests");
-      setFriendRequests(data.data);
-      setFriendOffers([]);
-      setContentType(type);
-    } catch (error) {
-      throw new Error((error as AxiosError).message);
-    }
-  };
-
-  const handleOffers = async (type: string) => {
-    try {
-      const { data } = await axios.get("friend/offers");
-      setFriendOffers(data.data);
-      setFriendRequests([]);
-      setContentType(type);
-    } catch (error) {
-      throw new Error((error as AxiosError).message);
-    }
-  };
+  const friendRequest = useSelector((state: RootState) => state.friend.request);
+  const friendOffer = useSelector((state: RootState) => state.friend.offer);
+  const dispatch = useDispatch();
 
   const handleAdd = async (id: number) => {
     try {
       await axios.post("friend/", {
         whom: id,
       });
-      const filterFriendReq = friendRequests.filter(
-        (el: TUser) => el.id !== id
-      );
-      const filterFriendOff = friendOffers.filter((el: TUser) => el.id !== id);
-      setFriendRequests(filterFriendReq);
-      setFriendOffers(filterFriendOff);
-    } catch (error) {
-      throw new Error((error as AxiosError).message);
+      socket.emit("friend:add", id); /// это когда нажимаю принять или отклонить в рек или оферс
+      friendOffer.forEach((el) => {
+        if (el.id === id) {
+          dispatch(addFriend(el));
+        }
+      });
+      dispatch(deleteOffer({ id }));
+    } catch (err: unknown) {
+      const error = err as AxiosError;
+      console.error(error.message);
     }
   };
 
   const handleDelete = async (id: number) => {
     try {
       await axios.delete(`friend/${id}`);
-      const filterFriendReq = friendRequests.filter(
-        (el: TUser) => el.id !== id
-      );
-      const filterFriendOff = friendOffers.filter((el: TUser) => el.id !== id);
-      setFriendRequests(filterFriendReq);
-      setFriendOffers(filterFriendOff);
-    } catch (error) {
-      throw new Error((error as AxiosError).message);
+      socket.emit("friend:delete", id);
+      dispatch(deleteRequest({ id }));
+      dispatch(deleteOffer({ id }));
+    } catch (err: unknown) {
+      const error = err as AxiosError;
+      console.error(error.message);
     }
   };
-
   return (
     <MainPage>
       <Flex display="flex" gap="15px">
         <StyledCardСontainer>
           <Flex display="flex" gap="10px">
-            <Text
-              padding="5px"
-              color="#dedede"
-              cursor="pointer"
-              isActive={contentType === "incoming"}
+            <NavbarLink
               onClick={() => {
-                handleOffers("incoming");
+                setContentType("incoming");
               }}
-              fs="15px"
+              isactive={contentType === "incoming"}
+              hidebackground
+              display="flex"
+              justifycontent="center"
+              alignitems="center"
+              width="90px"
+              height="30px"
+              br="5px"
+              padding="8px"
+              to="/friendRequests"
             >
-              Входящие
-            </Text>
-            <Text
-              padding="5px"
-              color="#dedede"
-              cursor="pointer"
-              isActive={contentType === "outgoing"}
+              <Text
+                onClick={() => {
+                  setIsOfferVisible(true);
+                }}
+                padding="5px"
+                color="#dedede"
+                cursor="pointer"
+                fs="15px"
+              >
+                Входящие
+              </Text>
+            </NavbarLink>
+            <NavbarLink
               onClick={() => {
-                handleRequests("outgoing");
+                setContentType("outgoing");
               }}
-              fs="15px"
+              isactive={contentType === "outgoing"}
+              hidebackground
+              display="flex"
+              justifycontent="center"
+              alignitems="center"
+              width="90px"
+              height="30px"
+              br="5px"
+              padding="8px"
+              to="/friendRequests"
             >
-              Исходящие
-            </Text>
+              <Text
+                onClick={() => {
+                  setIsOfferVisible(false);
+                }}
+                padding="5px"
+                color="#dedede"
+                cursor="pointer"
+                fs="15px"
+              >
+                Исходящие
+              </Text>
+            </NavbarLink>
           </Flex>
           <Area>
-            {friendOffers.map(({ firstName, lastName, avatar, id }: TUser) => (
-              <Area mt="15px">
-                <NavbarLink to={"/" + id}>
-                  <Card
-                    key={id}
-                    hideBorder={false}
-                    firstName={firstName}
-                    lastName={lastName}
-                    avatar={avatar ? avatar : defAvatar}
-                  >
-                    <Flex display="flex" gap="20px">
-                      <Button
-                        onClick={(e: React.MouseEvent<HTMLElement>) => {
-                          e.preventDefault();
-                          handleAdd(id);
-                        }}
-                        fs="15px"
-                        br="8px"
-                        color="black"
-                        bc="#c8c8c8"
-                        height="32px"
-                        width="150px"
+            {isOfferVisible
+              ? friendOffer.map(
+                  ({ firstName, lastName, avatar, id }: TUser, index) => (
+                    <Area key={index} mt="15px">
+                      <Card
+                        id={id}
+                        firstName={firstName}
+                        lastName={lastName}
+                        avatar={avatar ? avatar : defAvatar}
                       >
-                        Принять заявку
-                      </Button>
-                      <Button
-                        onClick={(e: React.MouseEvent<HTMLElement>) => {
-                          e.preventDefault();
-                          handleDelete(id);
-                        }}
-                        fs="15px"
-                        br="8px"
-                        color="#bcbcbc"
-                        bc="#3a3a3a"
-                        height="32px"
-                        width="150px"
-                      >
-                        Отклонить заявку
-                      </Button>
-                    </Flex>
-                  </Card>
-                </NavbarLink>
-              </Area>
-            ))}
-          </Area>
-          <Area>
-            {friendRequests.map(
-              ({ firstName, lastName, avatar, id }: TUser) => (
-                <NavbarLink to={"/" + id}>
-                  <Area mt="15px">
-                    <Card
-                      key={id}
-                      hideBorder={false}
-                      firstName={firstName}
-                      lastName={lastName}
-                      avatar={avatar ? avatar : defAvatar}
-                    >
-                      <Flex display="flex" gap="20px">
                         <Flex display="flex" gap="20px">
                           <Button
                             onClick={(e: React.MouseEvent<HTMLElement>) => {
                               e.preventDefault();
-                              handleDelete(id);
+                              handleAdd(id);
                             }}
                             fs="15px"
                             br="8px"
@@ -180,20 +140,64 @@ export const FriendRequests = () => {
                             height="32px"
                             width="150px"
                           >
-                            Отменить
+                            Принять заявку
+                          </Button>
+                          <Button
+                            onClick={(e: React.MouseEvent<HTMLElement>) => {
+                              e.preventDefault();
+                              handleDelete(id);
+                            }}
+                            fs="15px"
+                            br="8px"
+                            color="#bcbcbc"
+                            bc="#3a3a3a"
+                            height="32px"
+                            width="150px"
+                          >
+                            Отклонить заявку
                           </Button>
                         </Flex>
-                      </Flex>
-                    </Card>
-                  </Area>
-                </NavbarLink>
-              )
-            )}
+                      </Card>
+                    </Area>
+                  )
+                )
+              : friendRequest.map(
+                  ({ firstName, lastName, avatar, id }: TUser, index) => (
+                    <Area key={index} mt="15px">
+                      <Card
+                        key={id}
+                        id={id}
+                        firstName={firstName}
+                        lastName={lastName}
+                        avatar={avatar ? avatar : defAvatar}
+                      >
+                        <Flex display="flex" gap="20px">
+                          <Flex display="flex" gap="20px">
+                            <Button
+                              onClick={(e: React.MouseEvent<HTMLElement>) => {
+                                e.preventDefault();
+                                handleDelete(id);
+                              }}
+                              fs="15px"
+                              br="8px"
+                              color="black"
+                              bc="#c8c8c8"
+                              height="32px"
+                              width="150px"
+                            >
+                              Отменить
+                            </Button>
+                          </Flex>
+                        </Flex>
+                      </Card>
+                    </Area>
+                  )
+                )}
           </Area>
         </StyledCardСontainer>
         <StyledCardNav>
           <NavbarLink
-            hidebackground={true}
+            hidebackground
             display="flex"
             width="100%"
             height="30px"
@@ -206,7 +210,7 @@ export const FriendRequests = () => {
             </Text>
           </NavbarLink>
           <NavbarLink
-            background=" #3a3a3a"
+            background="#3a3a3a"
             display="flex"
             width="100%"
             height="30px"

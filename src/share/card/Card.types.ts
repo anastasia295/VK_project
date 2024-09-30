@@ -1,12 +1,14 @@
 export type TCardProps = {
-  hideBorder?: boolean;
+  hideborder?: boolean;
   name?: string;
   children?: React.ReactNode;
   firstName?: string;
   lastName?: string;
   avatar?: string;
+  key?: number;
+  id?: string | number;
 };
 
 export type TStyledTextWrapperProps = {
-  hideBorder?: boolean;
+  hideborder?: boolean;
 };

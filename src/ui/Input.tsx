@@ -30,11 +30,12 @@ export const Input = styled.input<InputProps>`
   }
 
   ${({ withborder }) =>
-    withborder &&
-    `&:focus {
+    withborder
+      ? `&:focus {
 border: 1px solid #abcdef;
 }
-`}
+`
+      : undefined}
 `;
 
 export interface InputProps {

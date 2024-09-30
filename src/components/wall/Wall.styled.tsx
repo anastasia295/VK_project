@@ -23,7 +23,7 @@ export const StyledPageRecords = styled.div`
   border-radius: 0px 0px 10px 10px;
   width: 550px;
   background: #222222;
-  height: 360px;
+  min-height: 350px;
   border-bottom: 1px solid #373737;
   border-left: 1px solid #373737;
   border-right: 1px solid #373737;

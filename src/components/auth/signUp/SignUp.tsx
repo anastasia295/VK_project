@@ -16,6 +16,7 @@ import {
   StyledPageblockVK,
 } from "./SignUp.styled";
 import axios from "../../../utils/axios/axios";
+import { AxiosError } from "axios";
 
 export const SignUp = () => {
   const [email, setEmail] = useState("");
@@ -39,8 +40,9 @@ export const SignUp = () => {
         const { data } = await axios.post("user/signUp", userData);
         dispatch(updateUser(data.data));
         navigate("/entrance");
-      } catch (e: any) {
-        return e.message;
+      } catch (err: unknown) {
+        const error = err as AxiosError;
+        console.error(error.message);
       }
     } else {
       throw new Error("У вас не совпадают пароли");
@@ -75,7 +77,7 @@ export const SignUp = () => {
 
             <Input
               type="text"
-              withborder={true}
+              withborder
               padding="15px"
               br="8px"
               width="304px"
@@ -90,7 +92,7 @@ export const SignUp = () => {
               }
             ></Input>
             <Input
-              withborder={true}
+              withborder
               padding="15px"
               br="8px"
               width="304px"
@@ -106,7 +108,7 @@ export const SignUp = () => {
             ></Input>
             <Input
               type="email"
-              withborder={true}
+              withborder
               padding="15px"
               br="8px"
               width="304px"
@@ -122,7 +124,7 @@ export const SignUp = () => {
             ></Input>
             <Input
               type="password"
-              withborder={true}
+              withborder
               border="1px solid #545454"
               br="8px"
               padding="15px"
@@ -138,7 +140,7 @@ export const SignUp = () => {
             ></Input>
             <Input
               type="password"
-              withborder={true}
+              withborder
               bc="#3f3f3f"
               br="8px"
               padding="15px"
