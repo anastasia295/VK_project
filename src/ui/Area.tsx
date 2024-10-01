@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import React from "react";
 
-export const Area = styled.h1<AreaProps>`
+export const Area = styled.div<AreaProps>`
   ${({ height }) => height && `height: ${height}`};
   ${({ width }) => width && `width: ${width}`};
   ${({ mt }) => mt && `margin-top: ${mt}`};
@@ -15,6 +15,14 @@ export const Area = styled.h1<AreaProps>`
   ${({ padding }) => padding && `padding: ${padding}`};
   ${({ margin }) => margin && `padding: ${margin}`};
   ${({ bc }) => bc && `background-color: ${bc}`};
+  ${({ position }) => position && `position: ${position}`};
+  ${({ top }) => top && `top: ${top}`};
+  ${({ right }) => right && `right: ${right}`};
+  ${({ left }) => left && `left: ${left}`};
+  ${({ bottom }) => bottom && `bottom: ${bottom}`};
+  ${({ br }) => br && `border-radius: ${br}`};
+  ${({ border }) => border && `border: ${border}`};
+  ${({ transform }) => transform && `transform: ${transform}`};
 `;
 
 export interface AreaProps {
@@ -32,4 +40,16 @@ export interface AreaProps {
   bc?: string;
   height?: string;
   width?: string;
+  br?: string;
+  top?: string;
+  right?: string;
+  left?: string;
+  bottom?: string;
+  bbottom?: string;
+  bleft?: string;
+  btop?: string;
+  bright?: string;
+  transform?: string;
+  border?: string;
+  position?: "relative" | "absolute" | "fixed" | "sticky";
 }

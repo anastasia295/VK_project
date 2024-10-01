@@ -1,16 +1,22 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 
-import styled, { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from "styled-components";
+import { Provider } from "react-redux";
+import Store from "./store/store/Store";
 
 const Global = createGlobalStyle`
 * {
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+  font-style: normal;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
- 
+  
+
+}
 }`;
 
 const root = ReactDOM.createRoot(
@@ -19,7 +25,9 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <>
-    <Global />
-    <App />
+    <Provider store={Store}>
+      <Global />
+      <App />
+    </Provider>
   </>
 );

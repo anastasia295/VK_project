@@ -1,0 +1,11 @@
+html,
+body {
+  scrollbar-gutter: stable;
+}
+
+.modal-open {
+  overflow: hidden;
+}
+dialog[open]::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
